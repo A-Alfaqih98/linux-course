@@ -1,0 +1,104 @@
+Some bash commands takes arguments and some dont.
+For example echo (prints what next) takes arguments:
+
+$ echo Hello Word
+
+And uptime (Show information about how the system been running for after the last reboot)
+
+$ uptime
+
+Commands also can take options after it which could be called switch or a flag, which proceeds a hyphen (-)after the command.
+For example to print without the trailing line after it use -n flag:
+
+$ echo -n Hello Word
+
+To know what options that a command has we refer to the command help options or man pages.
+
+___________________________________________________________________________
+
+There are two types of linux, Internal (Built-In) and External, there are 30 built-in linux commands.
+External command are binary programs or scripts, they can come with the linux distribution or either created or installed by the user.
+To know a command is internal or external use the type command:
+Commands also can take options after it which could be called switch or a flag, which proceeds a hyphen after the command
+$ type echo => echo is a shell builtin
+$ type mv => mv is /usr/bin/mv
+
+___________________________________________________________________________
+
+Basic Linux Commands:
+$ echo: display line of text, or the value of the ENVIRONMENT-VARIABLE if it starts with dollar sign ($ENVIRONMENT-VARIABLE), (e.g. $HOME and $SHELL).
+$ env: check all environment variables
+$ export: set a new environmetn variable (export OFFICE=caleston), if done without export it will be a session variable not environment one.
+$ cd: change directory (running cd without argument will go to home directory regardless of the current location)
+$ pwd: present working directory
+$ mkdir: make directory (takes folder names as arguments or folder paths such as existing-parnet/cild) or use -f flag to create the  $ parent directory as well if not already created.
+$ type: check command type.
+$ uptime: Show information about how the system been running for after the last reboot.
+$ pushd: push directory to a stack, what ever cd commands are made, they won't change this stack it will only be changes with pushd to add to stack and popd to romeve from it.
+$ popd: pop directory to remove directory from top of the stack, and go to the next top directory in the stack.
+$ mv: move file or directory, also used to rename files and directories. Takes two arguments src and destenation.
+$ cp: copy file or directory. Takes two arguments src and destenation folder, use -r (recursive option) to copy non empty directory.
+$ rm: delete file or directory, use -r (recursive option) to remove non empty directory.
+$ cat: concatenation files and print on the standard output.
+$ touch: create new file.
+$ more: To display file in a scrollable manner, (Enter to go down one line), (Space go down one page), (b go up one page), (/ sreach text), (q to quite), more load the whole file at once which not good when dealing with larger files.
+$ less: opposite of more. (up-arrow go up one line), (down-arrow go down one line).
+$ ls: list directory contents. -l option will get long list (which gets access mode, ownership, last access time). -a option will list all files inculding the hidden ones. -t to sort by time or -tr to reverse sort by time can also be used with long list (-lt or -ltr).
+$ whatis: display one-line manual page descriptions.
+$ man: interface to the system reference manuals. also --help or -h option can be used after command to show some features.
+$ apropos: search the manual page names and descriptions. (example: apropos modpr)
+$ watch: execute a program periodically, showing output fullscreen.
+$ chsh: change shell.
+$ alias: alias a command (alias dt=date).
+$ history: get the previously ran commands.
+$ which: locate a command.
+$ locale: check system locals. (locale is a set of environmental variables that defines the language, country, and character encoding setting).
+
+___________________________________________________________________________
+
+/ is the root directory
+
+It's possible to specify a directory by either the relative path (from current directory) or by absolute path (starting from the root directory /home/...)
+
+___________________________________________________________________________
+
+Symbols:
+
+$ >: Redirection (forward arrow), if done after cat followd by a file it will wait for user input to that file, and exit with (ctrl + d) which will replace the content of the file with the input.
+
+___________________________________________________________________________
+
+Default shell
+- The default shell in linux is bash, this can be checked using the echo $SHELL command.
+- The default shell can be changed using the chsh command (change to /bin/sh for example).
+
+___________________________________________________________________________
+
+- You can see what bash auto competion gives you by pressing tab.
+
+___________________________________________________________________________
+
+To make vriables persistant, add them add them to ~/.profile or ~/.pam_environment
+
+- When a user issues an external command to the shell the shell use PATH to search for this external command,
+type (echo $PATH) to see the directories defined in the path variable. If the path variable does not has the location or path of a command, running this command will result in a failure. 
+
+- Use which command to check the location of a commnad, if no result that means the command is not found
+
+- Add a command to path command using export PATH=$PATH:/opt/obs/bin
+
+___________________________________________________________________________
+
+- Bash prompt is the line you see and type after in bash, it can be customized to show different Information such as user and host names.
+
+- It also shows the pwd.
+
+- $ symbol is for user propmt.
+
+- Bash prompt is set and controled by a set of special shell environment variables, most common one is $PS1.
+
+- Current at print echo $PS1: \[\]\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ \[\].
+
+- Change the $PS1 variable to change the bash propmt.
+
+- Change to show date, time, user@host, and current working directory: export PS1="\d \t \u@\h:\w $ "
