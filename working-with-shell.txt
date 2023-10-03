@@ -40,7 +40,8 @@ $ mv: move file or directory, also used to rename files and directories. Takes t
 $ cp: copy file or directory. Takes two arguments src and destenation folder, use -r (recursive option) to copy non empty directory.
 $ rm: delete file or directory, use -r (recursive option) to remove non empty directory.
 $ cat: concatenation files and print on the standard output.
-$ touch: create new file.
+$ touch: change file timestamps, create new file.
+$ file: determine file type.
 $ more: To display file in a scrollable manner, (Enter to go down one line), (Space go down one page), (b go up one page), (/ sreach text), (q to quite), more load the whole file at once which not good when dealing with larger files.
 $ less: opposite of more. (up-arrow go up one line), (down-arrow go down one line).
 $ ls: list directory contents. -l option will get long list (which gets access mode, ownership, last access time). -a option will list all files inculding the hidden ones. -t to sort by time or -tr to reverse sort by time can also be used with long list (-lt or -ltr).
