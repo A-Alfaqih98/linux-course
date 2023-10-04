@@ -1,5 +1,5 @@
 Kernel Commands:
-$ uname: print system information. use -r or -a flags to print the kernal version.
+$ uname: print system information (kernal type and version). use -r or -a flags to print the kernal version.
 $ dmesg: print or control the kernel ring buffer, this will also contains logs from the hardware devices that the kernal detects.
 $ udevadm: udev (device manager for linux kernel) management tool.
 $ udevadm info: queries udev database for device information.
@@ -7,6 +7,15 @@ $ udevadm monitor: listen to the kernel udev events.
 $ lspci: list pci(preferel controller interconect), list information of all psi devices configured in the system such as ethernet and video cards.
 $ lsblk: list information about block devices, type disk is physical disk and type part is partition.
 $ lscpu: display information about the CPU architecture. 32 bit cpu can adress and store 2^32 values in its registers (location in cpu that can be rapidly accessed, it's used to load data from memory and carry on arythmetic operations, e.g. add, subtract, multiply and so on). The 32 bits processor has a limitaion on maximum of 4GB. Sockets are the physical slots in the mother board where you can insert a physical cpu, cpu has multiple cores and each core has multiple threads. The total number of cpu or virtual cpus available in the system is the number of Sockets * Cores * Threads = CPUs, if 8 it means this system can run 8 thread at a time.
+$ lsmem: list the ranges of available memory with their online status.
+$ free: Display amount of free and used memory in the system, use -k to show results in kb or -m for mb or g for -b.
+$ lshw: list detailed information about the entire hardware configuration e.g. memory, farmeware, cpu and so on.
+$ sudo: execute a command as another user.
+$ runlevel: Print previous and current SysV runlevel.
+$ systemctl: Control the systemd system and service manager.
+$ systemctl get-default: Gets the default systemd target (runlevel) which will look up the file located at /lib/systemd/system/default.target.
+$ systemctl set-default multi-user.target: Cahnge the default systemd target (runlevel), the target is passed as second argument.
+
 ___________________________________________________________________________
 
 Go to kernel.org to see linux kernal source code.
@@ -14,3 +23,24 @@ Go to kernel.org to see linux kernal source code.
 ___________________________________________________________________________
 
 When a usb is inserted to a linux machine, the kernel device driver emits an event to the user space device manager demon called udev, then udev will create a device node assossiated with the newly attached drive in th /dev file system.
+
+___________________________________________________________________________
+
+* Booting: booting is the process of starting the operating system (Not turining on a computer).
+* BIOS: In computing, BIOS is firmware used to provide runtime services for operating systems and programs and to perform hardware initialization during the booting process.
+
+Boot Stages:
+1- BIOS POST: POST (power on self test), POST test inures that the hardware components attached to the device are fucntioning correctly. If POST fails the computer might not be operable, and the booting won't proceed to the next boot stage.
+2- Boot Loader (GRUB2): After succefull POST tes, the BIOS loads and executes the boot code from the boot device, which is located on the first sector of the hard, in linux this is located in the /boot. BOOT Loader provides the user with a boot screen often with multiple options to boot into such as windows and ubunto. Once the selectoin is made at the boot screen, the BOOT Loader loads the kernel into memory supplies it with some parameters and hans over the control to the kernel. A popular example of boot loader is GRUB2 which stands for Grand Unified Boot Loader v2, and now it's the primiry Boot Loader for most linux distributions.
+3- Kernel Intialization: Kernel is usually decompressed in this stage, since it get compressed to save space. Next it's loaded to memory and starts executing, and start running tasks as intializing hardware and running memory tasks, among other things.
+4- INIT Process (systemd): Once It's completly operational the kernel looks up the INIT process to run, which sets up the user space. then mostly the systemd, which is resposible for bringing linux host to a usable state. systemd is resposible for mounting file systems, starting and managing system services.
+
+Booting is done in two ways:
+1- Start a linux process which is in a hulted or stopped state.
+2- Reboot or reset a linux system.
+
+
+___________________________________________________________________________
+
+There multiple modes linux can run on (system targets) for linux, graphical and non graphical are among them.
+To check the number of operational modes type: runlevel. For example the graphical interface that we usually use is runlevel 5 and 3 is the non-graphical runlevel. Depinding on the runlevel mode, the booting INIT stage will run certain services. In systemd run levels are called targets.
