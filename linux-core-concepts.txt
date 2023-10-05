@@ -15,6 +15,8 @@ $ runlevel: Print previous and current SysV runlevel.
 $ systemctl: Control the systemd system and service manager.
 $ systemctl get-default: Gets the default systemd target (runlevel) which will look up the file located at /lib/systemd/system/default.target.
 $ systemctl set-default multi-user.target: Cahnge the default systemd target (runlevel), the target is passed as second argument.
+$ df: report file system disk space usage
+$ stat: display file or file system status
 
 ___________________________________________________________________________
 
@@ -48,6 +50,34 @@ To check the number of operational modes type: runlevel. For example the graphic
 ___________________________________________________________________________
 
 File Types in Linux:
-1- Regular File
-2- Directory (even a directory is file since every thing is a file)
-3- Special Files
+1- Regular File: Images, Scripts, Configuration and Data files, etc.
+2- Directory (even a directory is file since every thing is a file): Type of file that stores other files.
+3- Special Files: Special files can be subcategorized into 5 file types:
+    1. Character Files: These files represent devices under the /dev filesystem that allow the OS to comunicate with I/O devices (such as mouse and keyboard).
+    2. Block Files: Files that represent block devices (e.g. hard disk and RAM) located in /dev.
+    3. Links: is a way in linux to assosiate two file names to the same set of file data. And there are two types of Links, Hard Link (two or more file names with a hard link assosiate the same set of data althou each of them act as independant file, deleting one will delete the data), second type is Soft Link (Symbolic link or pointers, alias for a file which wont delete the original file if been deleted).
+    4. Socket Files: Special files that enable the comnucation between two processes.
+    5. Named Pipes: Files allow connecting one files as an input to another, the data flowing from a pipe is unidirectional from first process to the second.
+
+File types identifiers:
+1- Directory (d)
+2- Regular File (-)
+3- Character File (C)
+4- Link (l)
+5- Socket File (s)
+6- Named Pipe (p)
+7- Block Device (b)
+
+Filesystem Hierarchy Standard (FHS):
+- /home: home directories for all users except for the root user which is located at /.
+- /opt contains third-party programs.
+- /mnt mount filesystems temporarly in the system.
+- /tmp stores temporary data.
+- /media where external media are located such as usb, use df (disk file system) command to print out details about all the mounted file systems.
+- /dev contains special blocks and character device files, this directory contains files such as the external hard disks and the mouse and keyboard.
+- /bin containes the basic programs in binary such as the cp and mv commands.
+- /etc stores most of configuration files.
+- /lib place to look for shared libraies to imported into your programs.
+- /usr location where all user land application where their data resides such as vi test editor.
+- /var this is the directory to which system writes data such as logs cached data. You might look here when you have issues with a system or application to see the logs.
+
