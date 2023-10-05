@@ -44,3 +44,10 @@ ___________________________________________________________________________
 
 There multiple modes linux can run on (system targets) for linux, graphical and non graphical are among them.
 To check the number of operational modes type: runlevel. For example the graphical interface that we usually use is runlevel 5 and 3 is the non-graphical runlevel. Depinding on the runlevel mode, the booting INIT stage will run certain services. In systemd run levels are called targets.
+
+___________________________________________________________________________
+
+File Types in Linux:
+1- Regular File
+2- Directory (even a directory is file since every thing is a file)
+3- Special Files
