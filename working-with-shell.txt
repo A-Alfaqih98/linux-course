@@ -82,7 +82,7 @@ ___________________________________________________________________________
 To make vriables persistant, add them add them to ~/.profile or ~/.pam_environment
 
 - When a user issues an external command to the shell the shell use PATH to search for this external command,
-type (echo $PATH) to see the directories defined in the path variable. If the path variable does not has the location or path of a command, running this command will result in a failure. 
+type (echo $PATH) to see the directories defined in the PATH variable. If the PATH variable does not has the location or path of a command, running this command will result in a failure. 
 
 - Use which command to check the location of a commnad, if no result that means the command is not found
 
