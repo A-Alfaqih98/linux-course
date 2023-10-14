@@ -7,7 +7,7 @@ And uptime (Show information about how the system been running for after the las
 
 $ uptime
 
-Commands also can take options after it which could be called switch or a flag, which proceeds a hyphen (-)after the command.
+Commands also can take options after it which could be called switch or a flag, which proceeds a hyphen (-) after the command.
 For example to print without the trailing line after it use -n flag:
 
 $ echo -n Hello Word
@@ -16,7 +16,7 @@ To know what options that a command has we refer to the command help options or 
 
 ___________________________________________________________________________
 
-There are two types of linux, Internal (Built-In) and External, there are 30 built-in linux commands.
+There are two types of linux commands, Internal (Built-In) and External, there are 30 built-in linux commands.
 External command are binary programs or scripts, they can come with the linux distribution or either created or installed by the user.
 To know a command is internal or external use the type command:
 Commands also can take options after it which could be called switch or a flag, which proceeds a hyphen after the command
@@ -31,7 +31,7 @@ $ env: check all environment variables
 $ export: set a new environmetn variable (export OFFICE=caleston), if done without export it will be a session variable not environment one.
 $ cd: change directory (running cd without argument will go to home directory regardless of the current location)
 $ pwd: present working directory
-$ mkdir: make directory (takes folder names as arguments or folder paths such as existing-parnet/cild) or use -f flag to create the  $ parent directory as well if not already created.
+$ mkdir: make directory (takes folder names as arguments or folder paths such as existing-parnet/cild) or use -p flag to create the  $ parent directory as well if not already created.
 $ type: check command type.
 $ uptime: Show information about how the system been running for after the last reboot.
 $ pushd: push directory to a stack, what ever cd commands are made, they won't change this stack it will only be changes with pushd to add to stack and popd to romeve from it.
@@ -40,11 +40,11 @@ $ mv: move file or directory, also used to rename files and directories. Takes t
 $ cp: copy file or directory. Takes two arguments src and destenation folder, use -r (recursive option) to copy non empty directory.
 $ rm: delete file or directory, use -r (recursive option) to remove non empty directory.
 $ cat: concatenation files and print on the standard output.
-$ touch: change file timestamps, create new file.
+$ touch: change file timestamps (last update time), create new file.
 $ file: determine file type.
 $ more: To display file in a scrollable manner, (Enter to go down one line), (Space go down one page), (b go up one page), (/ sreach text), (q to quite), more load the whole file at once which not good when dealing with larger files.
 $ less: opposite of more. (up-arrow go up one line), (down-arrow go down one line).
-$ ls: list directory contents. -l option will get long list (which gets access mode, ownership, last access time). -a option will list all files inculding the hidden ones. -t to sort by time or -tr to reverse sort by time can also be used with long list (-lt or -ltr).
+$ ls: list directory contents. -l option will get long list (which gets access mode, ownerships, last access time). -a option will list all files inculding the hidden ones. -t to sort by time or -tr to reverse sort by time can also be used with long list (-lt or -ltr).
 $ whatis: display one-line manual page descriptions.
 $ man: interface to the system reference manuals. also --help or -h option can be used after command to show some features.
 $ apropos: search the manual page names and descriptions. (example: apropos modpr)
@@ -66,6 +66,8 @@ ___________________________________________________________________________
 Symbols:
 
 $ >: Redirection (forward arrow), if done after cat followd by a file it will wait for user input to that file, and exit with (ctrl + d) which will replace the content of the file with the input.
+
+$ >>: Double Redirection will append the redirected content to the destination.
 
 ___________________________________________________________________________
 
