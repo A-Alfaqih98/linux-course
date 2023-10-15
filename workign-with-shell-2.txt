@@ -1,0 +1,97 @@
+Working With Shell - ||
+
+Commands:
+$ du (Disk Usage):Estimate file disk space usage. Use -sk option to get the size of a file or a directory in kb, or use -sh to get human readable format.
+$ ls -lh: Long list with human readable format.
+$ tar (Tape Archive): an Archiving utility (An archive file is a compressed file that contains one or more files bundled together for more accessible storage and portability), used to group multiple files or directories into single file called, use -cf option to create tar file and to specify the file name, the third and after arguments are the files or directories to be archived. Use -tf to see the content of the tar file. Use -xf to extract the a tar file, or -zcf to compress a tar file.
+
+
+___ Compressing / decompressing Commands ___
+
+* The extensions commands adds extensions to the compressed file, and the compressed file sizes depends on the file content and the compression algorithm.
+
+$ bzip2 / bunzip2: bz2
+$ gzip / gunzip: gz
+$ xz / unxz: xz
+
+* Compressed file needs not to be uncompressed every time. The following tools allows the compressed files to read without decompressing them.
+
+$ zcat
+$ bzcat
+$ xzcat
+
+___ Searching for Files and Directories ___
+
+* There are a variety of ways to locate a file or a directory in the file system.
+
+$ locate: list files in databases that match a pattern. If you recently installed linux or manipulated files you might need to use updatedb command to update mlocate.db where locate command query file name from.
+$ find: search for files in a directory hierarchy. Use -name to search for a file.
+
+___ Searching Within Files ___
+
+$ grep:-
+Example 1: grep {pattern} {file name}, this gets the lines where this pattern is matched in a file, use -i to make the search case insensitive.
+Example 2: grep -r {pattern} {directory path}, search the lines where it includes the search patterns in all files in the directory, It will even search in a child directory.
+Example 3: grep -v {pattern} {file name}, gets all lines that does not include the given pattern.
+Example 4: grep -w {pattern} {file name}, gets the lines that includes words matching the whole pattern not just only part of the word that is matching.
+Example 5: grep -A1 -B1 {pattern} {file}: gets a number of lines before and after the lines that includes the pattern as well as the matching line.
+
+Note: It is possible to combine multiple options together, for example -iw.
+
+_________________________________________________________________________
+
+* There are three data streams created when you launch linux command, Standard IN (STDIN), Standard Out (STDOUT), and Standard Error (STDERR). The STDIN is the command itself. All these streams can be directed to a text file.
+
+* Use the forward arrow (>) symbol to redirect STDOUT to a text file or double forward arrows to append to a text file. 
+
+* To redirect the STDERR use the 2> symbol. If file does not exist a new one will be created otherwise the file will be over written. Or, use 2>> to append the STDERR to a file.
+
+* If you want to hide the STDERR, redirect the STDERR TO /dev/null, e.g 2> /dev/null
+
+* We can make the STDOUT of a command the STDIN for another by using the PIPE symbol (|).
+For Example: cat hello.txt | less === less (Content of hello.txt)
+
+* To print the STDOUT before redirecting it to another command use a pipe operator followed by the tee command. For example: cat hello.txt | tee new-file.txt. Use tee -a flag to append to a file.
+
+___ VI Text Editor ___
+* VI Text Editor comes out of the box for most of linux distributions.
+
+* VI has three operation modes:
+1- Command Mode: The first default mode when opening a file, the editor only understand commands in this mode. In this mode you can issue commands to the editor such as copy, paste, delete line or word.
+2- Insert Mode: This mode allows you to type text into the file.
+3- Last Line: In this mode you can choose to save changes to the file, discard changes, or exit the vi editor.
+
+* To switch from command mode to insert mode type lower case i other options are(a, o, O, A, I), and switch back to command mode using Esc button.
+
+* From the command mode you can go to last line mode using colon (:), and switch back to command mode using Esc button.
+
+Command Mode:
+- Move Around using Arrows or (h j k l) keys.
+- To Copy line use the (y y).
+- To Paste use (p).
+- To Save the file use uppercase (Z Z).
+- To Delete a letter use (x).
+- To Delete a line use (d d).
+- To Delete number of line from and with the current line use (d {number of lines} d), e.g. d 2 d.
+- To Undo the previous change type (u).
+- To Redo the previous change use (ctrl + r).
+- To Search pattern form the current line downward use (/) the then type the pattern.
+- To Search pattern form the current line upward use (?) the then type the pattern.
+- To move to the next searched pattern occurrence use (n), for the previous one use (N).
+
+
+Insert Mode:
+After accessing the Insert mode, you can treat it as a graphical text editor then exit using (Esc) button.
+
+
+Last Line:
+- Save by typing (:w).
+- Exit by typing (:q).
+- Save and exit by typing (:wq).
+- Quite without saving the latest changes by typing (:q!).
+
+* An improved version of vi is vim, and in most distributions today the vi is a symbolic link to the vim editor. To check this use either of these commands:
+1- ls -ltr /usr/bin/vi => lrwxrwxrwx 1 root root 20 Sep 28 09:56 /usr/bin/vi -> /etc/alternatives/vi
+2- file /usr/bin/vi => /usr/bin/vi: symbolic link to /etc/alternatives/vi
+
+* To the differences between vi and vim use man pages or check within vim. Also, use (:h) to get help.
