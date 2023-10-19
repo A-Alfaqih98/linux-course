@@ -1,0 +1,56 @@
+Networking
+________________________
+
+DNS
+
+
+* The local dns can be found in /etc/hosts, It's where the computer goes before reaching the remote dns. We can assign different hosts name to a predefined IP.
+
+* Translating the domain name to IP Address is called Name Resolution.
+
+* In a private network we can make a dns server and point all hosts to lookup that server to resolve a hostname to an IP address instead of looking on their own /etc/hosts file. To point the hosts to that dns server we go to /etc/resolv.conf and change the nameserver IP address to the new shared dns server IP address, also, it is possible to add more the one nameservers. Nevertheless, we will still be able to add entry to your host file for your own system usage.
+
+* Note that the host first looks into the /etc/hosts file before going to the nameserver in /etc/resolv.conf, though this order can be changed from /etc/nsswitch.conf by changing the "hosts" order. files === /etc/hosts and dns === /etc/resolv.conf.
+
+* It is possible to point any unknown host to an external dns that knows it. This can be done for the private dns server.
+
+* Systems with their names are called names as the hosts in the private network. But with a www and .com at the end its called a domain name, and it is how IP addresses translate to names in the public network.
+
+* The dot (.) in the domain it called the root. The last portion of domain name is called top level domain e.g. .com .net .sa. They represent the intent of the website, for example .com is for commercial or general purpose  and .net is for network or general purpose or and .edu is for education organizations and .org is for nonprofit organizations, etc.
+
+* In the example of www.google.com, google is called the domain name, and www is a subdomain. The subdomain help in further grouping things together under google, for example google map service is available at maps.google.com, and google storage services are available at drive.google.com, and mobile apps are at apps.google.com, and so on with mail and www. These subdomains get be divided into further subdomains based on your needs.
+
+* When you enter www.google.com in the browser you will first go to your organization dns, then since it does not know google it will move to the Root DNS (.) which will directs you to .com DNS then which will direct you to Google dns which will provide you with the IP.
+
+* Your organization might choose to cache the IP for few minutes so it speeds the process next time you hit the link.
+Commands.
+
+* Even within your private network you can set similar name resolution were multiple subdomain are resolves one by one.
+
+* To append anything to the typed host name, go to the /etc/reolv.conf and add it to the search entry. for example if you set search to .com, next time you ping www.google it will tries www.google.com. And your host will be intelligent enough to exclude the search domain if you actually typed the full domain. for example if you pinged www.google.com.
+
+* It's possible to add more than one search domain, so it will try to append each domain to the entered host name and see which one works.
+
+* The records stored in a DNS server has three main types, (These types can be seen in AWS Route53 service):
+1- A Record Type: Mapping a host name to IPv4 address.
+2- AAAA Record Type: Mapping a host name to IPv6 address.
+2- CNAME Record: Mapping a name to another name.
+
+
+________________________
+
+Networking Basics
+
+
+
+* Switch creates a network containing systems (hosts), systems could be laptops, desktop, or VM on the cloud, etc. Each host has an interface which could be physical or virtual depending on the host, to check that interface use the ip link command. We connect the systems to the network through ethernet or wifi, then we assign the systems connected to the network ip address within the switch network using this command: ip addr add 192.168.1.10/24 dev eth0, note the ip here should be a host ip in the switch private network. And now, the computers can communicate (send packets to one another) to each other through the switch.
+
+
+* If we have a network (switch), and we want to connect it to another network, we use a router. A router can be thought of as another server (host in the switch private network) with many network ports. Since it gets connected to the two separate networks, it gets two or more IP address assigned to it, not one as normal host in the network
+
+________________________
+
+Commands:
+ping: used to test connection with other hosts (send ICMP ECHO_REQUEST to network hosts). If ping is disabled in the other host this wont work.
+nslookup: query Internet name servers interactively, it's better than ping in testing dns resolution. Noting that nslookup does not consider the entries in the local /etc/hosts file.
+dig: DNS lookup utility, it return more details as a similar form as it is stored in a server. Noting that nslookup does not consider the entries in the local /etc/hosts file.
