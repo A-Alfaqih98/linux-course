@@ -43,14 +43,52 @@ Networking Basics
 
 
 
-* Switch creates a network containing systems (hosts), systems could be laptops, desktop, or VM on the cloud, etc. Each host has an interface which could be physical or virtual depending on the host, to check that interface use the ip link command. We connect the systems to the network through ethernet or wifi, then we assign the systems connected to the network ip address within the switch network using this command: ip addr add 192.168.1.10/24 dev eth0, note the ip here should be a host ip in the switch private network. And now, the computers can communicate (send packets to one another) to each other through the switch.
+* Switch creates a network containing systems (hosts), systems could be laptops, desktop, or VM on the cloud, etc. Each host has an interface which could be physical or virtual depending on the host, to check that interface use the ip link command. We connect the systems to the network through ethernet or wifi, then we assign the systems connected to the network ip address within the switch network using this command: ip addr add 192.168.1.10/24 dev eth0, note the ip here should be a host ip in the switch private network and eth0 is the interface name. And now, the computers can communicate (send packets to one another) to each other through the switch.
 
 
-* If we have a network (switch), and we want to connect it to another network, we use a router. A router can be thought of as another server (host in the switch private network) with many network ports. Since it gets connected to the two separate networks, it gets two or more IP address assigned to it, not one as normal host in the network
+* If we have a network (switch), and we want to connect it to another network, we use a router. A router can be thought of as another server (host in the switch private network) with many network ports. Since it gets connected to the two separate networks, it gets two or more IP address assigned to it, not one as normal host in the network. In other words, it is like a host that is connected to the two networks, and can enable communication between them.
+
+* In order for the systems within a private network to know where to go to access a device in another network that is connected to it's own network through a router is with Gateway configured in the systems (or a route), the Gateway is a way to the outside world. To see thi existing routing configuration in the system, run the route command. To configure the Gateway (Router IP that is connected to the private network) in the system, run the ip route add 192.168.2.0/24 via 192.168.1.1, the first IP is the other network IP, and the second IP is the router IP in the current network. And this should be done in all systems to allow full communication between the systems.
+
+* To get connected to the internet, first connect the router to the internet, then add a new routing table in the systems that sets the Gateway to route all traffic to the internet. To route all the traffic to the router, just use this command: ip route add default via 192.168.2.1, the default word can be changed to 0.0.0.0 it means any IP destination.
+
+* 0.0.0.0 entry in the Gateway field means indicates that you don't need a Gateway, this is used when a system is connected to it's private network.
+
+* If there are multiple routers in the networks, then the systems needs to configure two Gateways, one for each network if for example one is private and the other is public.
+
+* If you're having issues reaching the internet from your systems this routing table (route command to view it), and the default Gateway configuration is good place to look at.
+
+
+________________________
+
+Troubleshooting
+
+* To insure that an interface is up, use the ip link command.
+
+* To check if our system can resolve a hostname to IP address use nslookup {hostname} command.
+
+* ping the remote server to see if we get a response, though ping might not always work cause it has to be activated at the server as well. ping works by sending packets and see if it receives any.
+
+* To troubleshoot the an issue with a route we use the traceroute {IP address} command, which will show the number of hops or devices between the source and destination. Also, it will show if there is a problem with any of the devices in the network route.
+
+* To print the information of network connections use the netstat command.
+
+
+
 
 ________________________
 
 Commands:
-ping: used to test connection with other hosts (send ICMP ECHO_REQUEST to network hosts). If ping is disabled in the other host this wont work.
-nslookup: query Internet name servers interactively, it's better than ping in testing dns resolution. Noting that nslookup does not consider the entries in the local /etc/hosts file.
-dig: DNS lookup utility, it return more details as a similar form as it is stored in a server. Noting that nslookup does not consider the entries in the local /etc/hosts file.
+$ ping: used to test connection with other hosts (send ICMP ECHO_REQUEST to network hosts). If ping is disabled in the other host this wont work.
+$ nslookup: query Internet name servers interactively, it's better than ping in testing dns resolution. Noting that nslookup does not consider the entries in the local /etc/hosts file.
+$ dig: DNS lookup utility, it return more details as a similar form as it is stored in a server. Noting that nslookup does not consider the entries in the local /etc/hosts file.
+$ ip link: used to list and modify interfaces in the host, also it is used to check if an interface is up.
+$ ip addr: see the IP addresses assigned to the interfaces.
+$ ip addr add {IP of the network} dev eht0: used to set IP addresses in the interface names.
+$ route: used to view the routing table.
+$ ip route add {IP}/24 via {Gateway IP}: used to add routes to the routing table.
+$ ip link set dev {interface name} up: to bring an interface up.
+$ traceroute: print the route packets trace to network host.
+$ netstat: Print network connections, routing tables, interface statistics, masquerade connections, port with application listening to it, and multicast memberships.
+
+// Note if you want to persist these changes you must set them in the /etc/network/interfaces file
