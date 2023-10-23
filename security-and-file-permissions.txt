@@ -5,8 +5,8 @@ _____________________________
 Linux Accounts
 
 
-* Every user in linux has an associated account, the user account maintains information such a username, password used to log in to the system. Also, each user has a unique identifier in the system called UID.
-Moreover, account more information that the user account holds includes the home directory of the user, and default shell, these information about a user account can be found in /etc/passwd.
+* Every user in linux has an associated account, the user account maintains information such username and password used to log in to the system. Also, each user has a unique identifier in the system called UID.
+Moreover, accounts have more information that the user account holds, including the home directory of the user and default shell, these information about a user account can be found in /etc/passwd.
 
 * Linux group is a collection of users, it is used to organize users based on common attributes such as row or a function. Information about groups can be found in /etc/group, each group has a unique identifier called the GID. One user can be a part of multiple groups.
 
@@ -15,23 +15,82 @@ Moreover, account more information that the user account holds includes the home
 * Types of Account:
 1- User Account: Refers to an individual people who needs access to the linux system.
 2- Super Account (root): This user has unrestricted access and control over the system including other users, and it has the UID of 0.
-3- System Account: Are usually created during the os installation, these are for use by for software and services that will not run as the super user. UID of system account are usually < 100 or between 500 and 1000. And the usually don't have a dedicated home directory and if they do, it will not be under /home.
-Examples of system account include ssh and mail.
+3- System Account: Are usually created during the OS installation, these are for use by softwares and services that will not run as the super user. UID of system accounts are usually < 100 or between 500 and 1000. And they usually don't have a dedicated home directory and if they do, it will not be under /home. Examples of system account include ssh and mail.
 4- Service Account: Are created when services are installed in linux, for example nginx.
 
-* sudo make run commands as the root user (change user to root user and run the command), or the su {username} command can be used to switch to any other user, if no arguments were given it will switch to root user. However, this is not recommended, it's better to use sudo instead.
+* sudo enables running commands as the root user (change user to root user and run the command), or the su {username} command can be used to switch to any other user, if no arguments were given it will switch to the root user. However, this is not recommended, it's better to use sudo instead.
 
 * When trusted user proceeds a command with sudo to gain administrative access, they will be prompted to enter their own user password.
 
-* The default configuration for sudo are defined under /etc/sudoers. These policies can be updated using the visudo command
+* The default configuration for sudo are defined under /etc/sudoers. These policies can be updated using the visudo command. Only users and groups under /etc/sudoers command can make use of the sudo command for privilege escalation.
 
+* It is possible to disable the capability of users logging in directly to the root user by setting "nologin" shell for root user.
+To view the the user login shell in the /etc/passwd file, example: this: root:x:0:0:root:/root:/bin/nologin, instead of root:x:0:0:root:/root:/bin/bash for example.
+
+* sudoers file syntax and symbols:
+Example: %sudo   ALL=(ALL:ALL) ALL
+1- Hash symbol (#) are for comments.
+2- First field (column) is for either the user or group to which privilege has been granted.
+3- Groups begins with a percentage symbol (%).
+4- The second field is left for the value ALL, specifies the hosts in which user can make use of privilege escalations. In a normal setup there is only one host which is the localhost, so it can be substituted with localhost word.
+5- The third field inclosed in parenthesis (), specifies the users and group that the user (in first field) can run commands as, its default is ALL.
+6- The forth field is the commands that can be ran, you can specify ALL meaning that the user can run all commands, or specify individual commands such as localhost=/usr/bin/shutdown -r now
 
 
 
 commands:
 $ id: print real and effective user and group IDs.
-$ who: how who is logged in to the system.
-$ last: display the records of all last logged in users, also shows the last time the system was rebooted.
+$ who: show who is logged in to the system.
+$ last: display the records of all last logged in users, also shows the last time the system has been rebooted.
 $ su: switch user, to run a command with substitute user and group ID.
 $ passwd {username}: used to change the user password.
 $ visudo: edit the sudoers file.
+
+
+_____________________________
+
+Access control files
+
+* Most of access control files are stored under the /etc directory. This directory can be read by any user by default but only root user can write to it. The access control files are designed in a way that they should not be modified using a text editor, but instead they should be modified using a special commands for that.
+
+* Basic Access control files:
+* Each line of these access control file represent a particular information about a user or a group. These lines have multiple fields separated by a colon (:). For instance in the /etc/passwd file the fields are USERNAME:PASSWORD:UID:GID:GECOS:HOMEDIR:SHELL. GECOS, is a csv format or a comma separated list of a user information such as user full name, phone number, etc.
+
+
+1- /etc/passwd, known as the password file, this file contains basic information about users in the system including username, UID, GID, home directory, and default shell. Note that this file does not contain any password, password are in another file which is /etc/shadow. The fields included in /etc/passwd are: USERNAME:PASSWORD:UID:GID:GECOS:HOMEDIR:SHELL.
+
+2- /etc/shadow, this file contains users passwords in a hashed form. The fields in the /etc/shadow are: USERNAME:PASSWORD:LASTCHANGE:MINAGE:MAXAGE:WARN:INACTIVE:EXPDATE. Note that the LASTCHANGE field is an epoch timestamp, which is a unix timestamp described as the number of days that has elapsed since midnight 1/1/1970. All the field here are regarding password and password changing. The EXPDATE is an epoch and it represents when the account will be expired, though it is not an enforced field.
+
+3- /etc/groups, stores information about all user groups in the system, such as the group name, UID, and members. The fields included in /etc/groups are: NAME:PASSWORD:GID:MEMBERS. Note that the MEMBERS of the group field can be a csv file (comma separated).
+
+
+_____________________________
+
+Managing users
+
+commands:
+$ useradd {username}: used by the system administrators to create new local users in the system with a system auto generated UID and GID. it will create the user home directory and set sh as the default shell. Note that this command should be run as root.
+$ userdel {username}: used to delete a user.
+$ passwd {username}: used to set the password for the username, this command should be run as root or by the same user. To change your own password you can run the command without arguments.
+$ whoami: used to check the current user id.
+$ groupadd {group name}: used to add new group. Use -g to specify custom GID for the group.
+$ groupdel {group name}: used to delete a group.
+
+
+
+Some flags for useradd command:
+-c: Custom comments (shown in /etc/passwd)
+-d: Custom home directory
+-e: Expiry date
+-g: Specific GID
+-G: Create user with multiple groups
+-s: Specify login shell
+-u: specify UID
+
+
+
+
+
+
+
+ 
