@@ -127,7 +127,13 @@ SSH (Secure Shell)
 
 * When using the ssh-keygen command to generate a ssh key pair it will ask for a passphrase, which is optional but adding it will improve the security of the key. The downside of adding a passphrase is the need to type it each time you want to use the key pair.
 
+* To be able to connect to a remote server using ssh pair, the ssh public key should be stored in the remote server in a file named /authorized_keys in the ssh directory.
+
 commands:
 $ ssh <hostname OR IP Address>: OpenSSH remote login client, this syntax will try to connect with the current user since no username has been specified.
 $ ssh <user>@hostname OR IP Address> | ssh -l <user> <hostname OR IP Address>: these ssh command syntaxes is used to connect certain user.
-$ shh-keygen: OpenSSH authentication key utility, this command is used to create ssh key pair in the client. It is possible to specify the type of key to be generated using the t flag followed by the type,  e.g ssh-keygen -t rsa. 
+$ shh-keygen: OpenSSH authentication key utility, this command is used to create ssh key pair in the client. It is possible to specify the type of key to be generated using the t flag followed by the type,  e.g ssh-keygen -t rsa. Note that rsa is the default type.
+$ ssh-copy-id <user>@<hostname>: use locally available keys to authorize logins on a remote machine, it will automatically add the client public key to the remote host, it will require the user password.
+$ scp <file path> <hostname:hostname file path> | scp <hostname:hostname file path> <file path>: OpenSSH secure file copy, this command allows you to copy data over ssh, meaning you can use it to copy files and directories form and to the remote server. Note that you should have permission to copy to the destination otherwise the command will fail with a permission denied error. use the -r option to copy directories instead of files and the the -p option to preserve the ownership and permission of the source file, they can be combined like this -pr.
+
+ 
