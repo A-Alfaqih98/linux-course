@@ -5,7 +5,7 @@ _____________________________
 Linux Accounts
 
 
-* Every user in linux has an associated account, the user account maintains information such username and password used to log in to the system. Also, each user has a unique identifier in the system called UID.
+* Every user in linux has an associated account, the user account maintains information such as username and password used to log in to the system. Also, each user has a unique identifier in the system called UID.
 Moreover, accounts have more information that the user account holds, including the home directory of the user and default shell, these information about a user account can be found in /etc/passwd.
 
 * Linux group is a collection of users, it is used to organize users based on common attributes such as row or a function. Information about groups can be found in /etc/group, each group has a unique identifier called the GID. One user can be a part of multiple groups.
@@ -30,10 +30,10 @@ To view the the user login shell in the /etc/passwd file, example: this: root:x:
 * sudoers file syntax and symbols:
 Example: %sudo   ALL=(ALL:ALL) ALL
 1- Hash symbol (#) are for comments.
-2- First field (column) is for either the user or group to which privilege has been granted.
+2- First field (column) is to define either the user or group to which privilege has been granted.
 3- Groups begins with a percentage symbol (%).
 4- The second field is left for the value ALL, specifies the hosts in which user can make use of privilege escalations. In a normal setup there is only one host which is the localhost, so it can be substituted with localhost word.
-5- The third field inclosed in parenthesis (), specifies the users and group that the user (in first field) can run commands as, its default is ALL.
+5- The third field inclosed in parenthesis (), specifies the users and groups that the user (in first field) can run commands as, its default is ALL.
 6- The forth field is the commands that can be ran, you can specify ALL meaning that the user can run all commands, or specify individual commands such as localhost=/usr/bin/shutdown -r now
 
 
@@ -54,12 +54,12 @@ Access control files
 * Most of access control files are stored under the /etc directory. This directory can be read by any user by default but only root user can write to it. The access control files are designed in a way that they should not be modified using a text editor, but instead they should be modified using a special commands for that.
 
 * Basic Access control files:
-* Each line of these access control files represent a particular information about a user or a group. These lines have multiple fields separated by a colon (:). For instance, in the /etc/passwd file the fields are USERNAME:PASSWORD:UID:GID:GECOS:HOMEDIR:SHELL. GECOS, is a csv format or a comma separated list of a user information such as user full name, phone number, etc.
+ Each line of these access control files represent a particular information about a user or a group. These lines have multiple fields separated by colon (:). For instance, in the /etc/passwd file the fields are USERNAME:PASSWORD:UID:GID:GECOS:HOMEDIR:SHELL. GECOS, is a csv format or a comma separated list of a user information such as user full name, phone number, etc.
 
 
 1- /etc/passwd, known as the password file, this file contains basic information about users in the system including username, UID, GID, home directory, and default shell. Note that this file does not contain any password, password are in another file which is /etc/shadow. The fields included in /etc/passwd are: USERNAME:PASSWORD:UID:GID:GECOS:HOMEDIR:SHELL.
 
-2- /etc/shadow, this file contains users passwords in a hashed form. The fields in the /etc/shadow are: USERNAME:PASSWORD:LASTCHANGE:MINAGE:MAXAGE:WARN:INACTIVE:EXPDATE. Note that the LASTCHANGE field is an epoch timestamp, which is a unix timestamp described as the number of days that has elapsed since midnight 1/1/1970. All the field here are regarding password and password changing. The EXPDATE is an epoch and it represents when the account will be expired, though it is not an enforced field.
+2- /etc/shadow, this file contains users passwords in a hashed form. The fields in the /etc/shadow are: USERNAME:PASSWORD:LASTCHANGE:MINAGE:MAXAGE:WARN:INACTIVE:EXPDATE. Note that the LASTCHANGE field is an epoch timestamp, which is a unix timestamp described as the number of days that has elapsed since midnight 1/1/1970. All the fields here are regarding password and password changing. The EXPDATE is an epoch and it represents when the account will be expired, though it is not an enforced field.
 
 3- /etc/groups, stores information about all user groups in the system, such as the group name, UID, and members. The fields included in /etc/groups are: NAME:PASSWORD:GID:MEMBERS. Note that the MEMBERS of the group field can be a csv file (comma separated).
 
@@ -69,7 +69,7 @@ _____________________________
 Managing users
 
 commands:
-$ useradd {username}: used by the system administrators to create new local users in the system with a system auto generated UID and GID. it will create the user home directory and set sh as the default shell. Note that this command should be run as root.
+$ useradd {username}: used by the system administrators to create new local users in the system with a system auto generated UID and GID. it will create the user home directory and set /bin/sh as the default shell. Note that this command should be run as root.
 $ userdel {username}: used to delete a user.
 $ passwd {username}: used to set or change the password for the username, this command should be run as root or by the same user. To change your own password you can run the command without arguments.
 $ whoami: used to check the current user id.
@@ -107,7 +107,7 @@ x = 1
 commands:
 $ chmod {ugo+r-x} {file name}: change file modes bits, this is the symbolic mode of changing file permissions. First argument represent whose permission we want to change (e.g. owner (u), group (g), or other (o) + the permission letters (r, w, x, or -)). Also, two or three permission can be passed separated by a comma like this u+rwx,g+r-x,o-rwx  noting that using minus symbol instead of plus will revoke the permission instead of granting it.
 $ chmod {750} {file name}: change file modes bits, this is the numeric mode of changing file permissions. The values used here are the octal values discussed above, each value represent a permission, first one for owner, second for group and third for others.
-$ chown {owner:group} {file name}: change file owner and group, the first argument can be the new owner and group separated by colon or only the owner.
+$ chown {owner:group} {file name}: change file owner and group, the first argument can be the new owner and group separated by a colon or only the owner.
 $ chgrp {group} {file name}: change group ownership.
  
 
@@ -119,9 +119,9 @@ SSH (Secure Shell)
 
 * The remote server we want to connect to should have ssh service running on port 22 accessible from the client for the connection to work.
 
-* Another requirement for ssh to work is a valid user name and password created on the remote system that you can use or an ssh key to log in the remote machine without a password.
+* Another requirement for ssh to work is a valid user name and password created on the remote system that you can use or an ssh key pair to log in the remote machine without a password.
 
-* When logging using username and password, you will get prompted to enter the password for the same user in the remote system.
+* When logging using username and password, you will get prompted to enter the password for the same user in the remote system as the user in the local one.
 
 * It is possible to implement PASSWORD-LESS authentication by generating ssh key pair, this pair consists of one public key and one private key. The private key should not be shared, only the public key should be shared and set in the remote server to be able to connect to it from the client.
 
@@ -131,9 +131,59 @@ SSH (Secure Shell)
 
 commands:
 $ ssh <hostname OR IP Address>: OpenSSH remote login client, this syntax will try to connect with the current user since no username has been specified.
-$ ssh <user>@hostname OR IP Address> | ssh -l <user> <hostname OR IP Address>: these ssh command syntaxes is used to connect certain user.
-$ shh-keygen: OpenSSH authentication key utility, this command is used to create ssh key pair in the client. It is possible to specify the type of key to be generated using the t flag followed by the type,  e.g ssh-keygen -t rsa. Note that rsa is the default type.
+$ ssh <user>@hostname OR IP Address> | ssh -l <user> <hostname OR IP Address>: these ssh command syntaxes are used to connect to certain user.
+$ shh-keygen: OpenSSH authentication key utility, this command is used to create ssh key pair in the client. It is possible to specify the type of key to be generated using the -t flag followed by the type,  e.g ssh-keygen -t rsa. Note that rsa is the default type.
 $ ssh-copy-id <user>@<hostname>: use locally available keys to authorize logins on a remote machine, it will automatically add the client public key to the remote host, it will require the user password.
-$ scp <file path> <hostname:hostname file path> | scp <hostname:hostname file path> <file path>: OpenSSH secure file copy, this command allows you to copy data over ssh, meaning you can use it to copy files and directories form and to the remote server. Note that you should have permission to copy to the destination otherwise the command will fail with a permission denied error. use the -r option to copy directories instead of files and the the -p option to preserve the ownership and permission of the source file, they can be combined like this -pr.
+$ scp <file path> <hostname:hostname file path> | scp <hostname:hostname file path> <file path>: OpenSSH secure file copy, this command allows you to copy data over ssh, meaning you can use it to copy files and directories form and to the remote server. Note that you should have permission to copy to the destination otherwise the command will fail with a permission denied error. use the -r (recursive) option to copy directories instead of files and the the -p option to preserve the ownership and permission of the source file, they can be combined like this -pr.
 
- 
+
+_____________________________
+
+IP Tables
+
+* iptables is a user-space utility program that allows a system administrator to configure the IP packet filter rules of the Linux kernel firewall.
+
+* There are three types of IP Tables rules or chains, Input, Forward, and Output. These chains can be shown using the iptables -L command. Since we did not specify any rules, the default policy will be accept, meaning all traffic are allowed in and out of the system.
+
+* These rules are called chains since each chain (Input, Forward, or Output) can have multiple rules within it, so it is a chain of rules. Each rule performs a check and accepts or drops the packet based on the condition. The sequence of the rules are important, the first met rule will be applied.
+
+* If no rule is set for certain client, the chain will resort to the default policy. And, if no source ip is added to the rule it means any source or anywhere.
+
+* Ephemeral (lasting for a very short time) Port Ranges are from 32768 to 60999, example of this is the response port in a database connection.
+
+Note: The default port for http is 80 and for https is 443.
+
+commands:
+$ iptables: administration tool for ipv4/ipv6 packet filtering and NAT.
+$ iptables -L: used to list the default rules or chains configured in the system.
+$ iptables -A INPUT -p tcp -s 172.16.238.187 --dport 22 -j ACCEPT: Adding Input (incoming) rule, the flags meanings can be found below.
+$ iptables -D OUTPUT 5: Used to delete a rule, in this example the output rule in position 5 is deleted.
+
+
+
+Rules Options:
+-A: Append Rule.
+-I: Add Rule to the top of the chain.
+-p: Protocol.
+-s: Source.
+-d: Destination.
+--dport: Destination port.
+-j: Action to take.
+
+
+_____________________________
+
+CRON
+
+* CRON is a service that runs in the background that executes pre set tasks periodically.
+
+* The first five fields in the crontab are used to specify the exact schedule to run the task. The sixth field is the command to run.
+
+* The schedule fields are as follows => minutes:hour:day:month:weekday, if a weekday is set that means the cronjob will only work if the date day met that certain day, 1 is for Monday. For months, 1 is January. and hours are in 24 hours format. To disregard any field of those, set it to asterisk (*). If only minutes are set, lets say 10, that means run the job on the 10th Minute of Every Hour on Every Day on Each Month on Any Weekday
+
+
+
+
+
+commands:
+$ crontab -e: This opens the crontab in the vi editor allowing us to add the configuration for our job.
