@@ -175,15 +175,17 @@ _____________________________
 
 CRON
 
-* CRON is a service that runs in the background that executes pre set tasks periodically.
+* CRON is a service that runs in the background that executes preset tasks periodically.
 
 * The first five fields in the crontab are used to specify the exact schedule to run the task. The sixth field is the command to run.
 
-* The schedule fields are as follows => minutes:hour:day:month:weekday, if a weekday is set that means the cronjob will only work if the date day met that certain day, 1 is for Monday. For months, 1 is January. and hours are in 24 hours format. To disregard any field of those, set it to asterisk (*). If only minutes are set, lets say 10, that means run the job on the 10th Minute of Every Hour on Every Day on Each Month on Any Weekday
+* The schedule fields are as follows => minutes:hour:day:month:weekday, if a weekday is set that means the cronjob will only work if the date day met that certain day, 1 is for Monday. For months, 1 is January. and hours are in 24 hours format. To disregard any field of those, set it to asterisk (*). If only minutes are set, lets say 10, that means run the job on the 10th Minute of Every Hour on Every Day on Each Month on Any Weekday.
 
+* To set the cronjob to run every other minute set the minutes with asterisk followed by slash then the value, like this */2 * * * *, this will run the cronjob every second minute. And the same can be done for other options.
 
-
+* To validate that the job was run successfully, check the out put file if any, or inspect the log file at /var/log/syslog.
 
 
 commands:
-$ crontab -e: This opens the crontab in the vi editor allowing us to add the configuration for our job.
+$ crontab -e: This opens the crontab in the editor allowing us to add the configuration for our job.
+$ crontab -l: used to list all job scheduled in cron.
