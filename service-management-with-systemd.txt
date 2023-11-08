@@ -29,7 +29,7 @@ Documentation=http://wiki.caleston-dev.ca/reported
 After=postgres.service
 
 [Service]
-ExecStart= /ust/bin/project-mercury.sh
+ExecStart= /usr/bin/project-mercury.sh
 User=project_mercury
 
 Restart=on-failure
@@ -53,10 +53,10 @@ $ systemctl restart <service name>: used to restart a service.
 $ systemctl reload <service name>: used to reload the service without interrupting normal functionalities.
 $ systemctl enable <service name>: used to enable a service and making  persistent to cross reboot.
 $ systemctl disable <service name>: used to disable service at boot.
-$ systemctl edit <service name> --full: used to edit the unit file for a service, editing unit files this way apply the changes immediately without having to run the deamon-reload command. 
-$ systemctl deamon-reload: used to reload the systemctl deamon so the system can detect any changes made in the service unit files.
+$ systemctl edit <service name> --full: used to edit the unit file for a service, editing unit files this way apply the changes immediately without having to run the daemon-reload command. 
+$ systemctl daemon-reload: used to reload the systemctl daemon so the system can detect any changes made in the service unit files.
 $ systemctl get-default: used to see the current run-level or target.
-$ systemctl set-defautl multi-user.target: used to change the default run-level.
+$ systemctl set-default multi-user.target: used to change the default run-level.
 $ systemctl list-units -all: used all units that are active, inactive, failed, or in other transient states. to see only information about the active units run the command without the --all flag.
 
 
