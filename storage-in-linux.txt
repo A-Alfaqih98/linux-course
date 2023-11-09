@@ -1,0 +1,27 @@
+Storage in Linux
+
+_______
+
+Disk Partition
+
+* Block device is a type of file that can be found under the /dev directory, it usually represents a piece of hardware that can stores data, traditional spinning hard disk or a solid state disk (SSD). It is called block storage cause data is read or written to it in blocks or chuck of space. To see the list of block devices in your system use the lsblk command, or run ls -l command in /dev directory and look for files with type b (block devices).
+
+* When listing block devices, each block device has Major and Minor Number (MAJ:MINN), The Major Number is used to identify the type of the block device, while Minor Numbers are used to distinguish individual physical or logical devices.
+
+* The concept of partitioning allows us to segment space and use each partition for a specific purpose.
+
+* There are three types of partitions:
+1- Primary Partition: Can be used to boot an operating system, traditionally disk are limited to not more than four primary partitions per disk.
+2- Extended Partition: A partition that can not be used on its own, but can host logical partitions, it has a partition table that points to one or more logical partitions.
+3- Logical Partition: Are those created within an Extended Partition.
+
+
+* How a disk is partitioned is defined by a partitioning scheme also known as a partition table. One of the schemes are the Master Boot Record (MBR). There can only be four primary partitions in an MBR, and the maximum size per disk is 2 TB, if we need more than 4 partitions (Primary or Extended) per disk we would need to create the fourth partition as an extended partition and carve out logical partitions within it.
+
+* GPT (GUID Partition Table) is a more recent partitioning scheme that was created to address the limitation in MBR. Theoretically GPT can have an unlimited number of partitions per disk, this can be limited by the restrictions imposed by the operating system. Additionally the disk size of maximum 2TB does not exist in GPT scheme. Unless the operating system you want to install on the disk requires MBR, GPT is always the best choice when it comes to selecting a partitioning scheme.
+
+commands:
+$ lsblk: used to list block devices, the TYPE disk is a whole disk (e.g. hard-disk), and underneath it can be found the disk partitions with TYPE part.
+$ fdisk -l: used to print the partition table with as the lsblk but with more information such as partition type and the size of the disk in bytes and sectors.
+$ gdisk <device path such as /dev/sdb>: gdisk is an improved version of fdisk that works with the GPT partition table, this command will take you to a menu driven interface. Use the question mark to print all available options.
+
