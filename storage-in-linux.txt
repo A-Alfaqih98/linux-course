@@ -31,9 +31,9 @@ File Systems in Linux
 
 * Partitioning alone does not make the disk usable in the OS, the disks in the partitions are seen by the Linux kernal as a raw disk. To write to a disk or a partition we have to create a File System, the File System defines how data are stored in a disk. After creating a File System, we must mount it to a directory, and that when we can read or write data to it.
 
-* EXT series are one of commonly used file systems.
+* EXT series are one commonly used file systems.
 
-* To make a mount available after system reboot, add an entry to /etc/fstab, cat the the file to see the entry arguments.
+* To make a mount available after system reboot, add an entry to /etc/fstab, cat the file to see the entry arguments.
 
 
 commands:
@@ -41,3 +41,68 @@ $ mkfs.ext4 <device path>: create an ext2/ext3/ext4 file system for the device.
 $ mount <device path> </mnt/ext4>: mount a filesystem to the system. Note that the /mnt/ext4 directory should be created.
 $ mount | grep <device path>: check if the file system is mounted.
 $ df -hP | grep <device path>: report file system disk space usage, and with this flag can check if the file system is mounted.
+
+__________________________
+
+DAS, NAS, and SAN
+
+* These storages cover the need for high capacity and availability external storage for small businesses and enterprises. Three different types of storage that we are going to see here:
+
+1- DAS: Direct Attached Storage, this storage has fast response since it is attached to the host, but it is only ideal for small businesses since it is dedicated to single host.
+
+2- NAS: Network Attached Storage, the NAS device are generally located apart from the host that will consume space from it, the data storage between the storage and the host is through the network. NAS is a file storage device unlike DAS and SAN that are block storage devices. The storage that is provided to the host is in a form of a directory or a share that is physically present in the NAS device but exported via NFS (Network File System) to the host. This type of storage is ideal for centralized shared storage that needs to be accessed simultaneously by different hosts, and can be used as the backend storage for web-servers or application-servers. Also can run data bases, although that is not recommended for production work loads, neither it is recommended for  to install OS.
+
+3- SAN: Storage Area Network, it provides block storage used by enterprises for business critical applications that needs to deliver high and low latency. Storage are allocated to hosts in a form of a Logical Unit Numbers (LUN), which is a range of blocks provisioned from a pool of a pool of shared storage and presented to the server as a logical disk. The hosts system will detects the storage as a row disk, we can then create partitions and file systems on top of it as we would with any other block device, and then mount it on the system to store data. SAN can be ethernet based, but it mainly make use of the FCP which stands for Fiber Channel Protocol, this a high speed data transfer protocol that make use of the fiber channel switch to establish communication with the host. Major advantage of SAN over NAS, that it can be used to host mission critical applications and databases due to its vastly superior performance and reliability.
+
+Note, throughput is a measure of how many units of information a system can process in a given amount of time.
+
+
+__________________________
+
+NFS Filesystem
+
+* Unlike block devices, NFS does not store data in blocks, instead it saves data in the form of files.
+
+* NFS server maintain /ets/exports configuration file, that defines the clients that should access the directories in the server. In an ideal case, there will be firewall between the NFS server and the client.
+
+* We will need to export directory in the server the hosts can use, such as /software/repos.
+
+commands:
+$ exportfs -a: exports all the mounts defined in /etc/exports file.
+$ exportfs -o <hostIP>:<directory to export> allows us to manually export directory, once exported you should be able to mount it on a local directory, for example mount <serverIP>:<exported repo> /mnt/software/repos.
+
+__________________________
+
+Logical Volume Manager (LVM)
+
+* LVM allows grouping of multiple physical volumes (which are hard disks or partitions) into a volume group. From this volume group you can can carve out some logical volumes.
+
+* Benefits of LVM including allowing volumes to be resized dynamically as long as there is sufficient space in the volume group.
+
+* On systems such our laptops /home/var/tmp/ can be created on top of LVM managed volumes, that allow the files inside it to dynamically resize.
+
+* First step in configuring LVM is to identify free disks or partitions and then create physical volume (PV), this is how LVM identify a disk or a partition object for them.
+
+* Note that the logical volumes under the LVM are accessible under two places, one under /dev/<volume group name>/<logical volume name>, and the second is under /dev/mapper/<volume group name>-<logical group name>.
+
+
+commands:
+$ apt-get install lvm2: to install lvm2 package.
+$ pvcreate <device or partition path>: initialize physical volume(s) for use by LVM.
+$ vgcreate <volume group name> <PV path>: create a volume group for which includes the physical volume, volume group can contain one or more physical volumes (PV). Note that, multiple PV's can be passed to create the VG with.
+$ pvdisplay: display various attributes of physical volume(s).
+$ vgdisplay: display volume group information.
+$ lvcreate -L 1G -n vol1 <VG name>: create a logical volume, in this example we create 1GB volume in the specified VG, the -L option stands for linear volume which is common type of logical volume (this option allows us to make use of multiple physical volumes (PV) if available in the volume group (VG).), and -n option for the logical volume name.
+$ lvdisplay: display information about a logical volume.
+$ lvs: list the logical volumes.
+$ mkfs.ext4 <logical volume path>: create a file system on the logical volume.
+$ mount -t ext4 <logical volume path> /mnt/vol1: mount the file system on the logical volume.
+$ vgs: display information about volume groups.
+$ lvresize -L +1G -n <logical volume path>: resize a logical volume, here we are adding 1GB to a logical volume.
+$ df -hp </mnt/vol1>: to check the created file system size, which will not automatically be resized when running the above command.
+$ resize2fs <file system name>: ext2/ext3/ext4 file system resizer, this command is used to resize the mounted file system to replicate the resize done to the logical volume.
+$ vgextend: add physical volumes to a volume group.
+
+caleston123
+
+/dev/vdb and /dev/vdc
