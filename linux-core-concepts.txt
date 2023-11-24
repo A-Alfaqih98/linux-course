@@ -1,51 +1,51 @@
 Kernel Commands:
-$ uname: print system information (kernal type and version). use -r or -a flags to print the kernal version.
-$ dmesg: print or control the kernel ring buffer, this will also contains logs from the hardware devices that the kernal detects.
+$ uname: print system information (kernel type and version). use -r or -a flags to print the kernel version.
+$ dmesg: print or control the kernel ring buffer, this will also contains logs from the hardware devices that the kernel detects.
 $ udevadm: udev (device manager for linux kernel) management tool.
-$ udevadm info: queries udev database for device information.
+$ udevadm info <device path>: queries udev database for device information.  the hardware devices can be found in the /dev directory.
 $ udevadm monitor: listen to the kernel udev events.
-$ lspci: list pci(preferel controller interconect), list information of all psi devices configured in the system such as ethernet and video cards.
-$ lsblk: list information about block devices, type disk is physical disk and type part is partition.
-$ lscpu: display information about the CPU architecture. 32 bit cpu can adress and store 2^32 values in its registers (location in cpu that can be rapidly accessed, it's used to load data from memory and carry on arythmetic operations, e.g. add, subtract, multiply and so on). The 32 bits processor has a limitaion on maximum of 4GB. Sockets are the physical slots in the mother board where you can insert a physical cpu, cpu has multiple cores and each core has multiple threads. The total number of cpu or virtual cpus available in the system is the number of Sockets * Cores * Threads = CPUs, if 8 it means this system can run 8 threads at a time.
+$ lspci: list pci(preferal controller interconnect), list information of all psi devices configured in the system such as ethernet and video cards.
+$ lsblk: list information about block devices, type disk is for physical disks and type part is for partitions.
+$ lscpu: display information about the CPU architecture. 32 bit cpu can address and store 2^32 values in its registers (location in cpu that can be rapidly accessed, it's used to load data from memory and carry on arithmetic operations, e.g. add, subtract, multiply and so on). The 32 bits processor has a limitation on maximum of 4GB. Sockets are the physical slots in the mother board where you can insert a physical cpu, cpu has multiple cores and each core has multiple threads. The total number of cpu or virtual cpu's available in the system is the number of Sockets * Cores * Threads = CPUs, if 8 it means this system can run 8 threads at a time.
 $ lsmem: list the ranges of available memory with their online status.
 $ free: Display amount of free and used memory in the system, use -k to show results in kb or -m for mb or -g for Gb.
-$ lshw: list detailed information about the entire hardware configuration e.g. memory, farmeware, cpu and so on.
+$ lshw: list detailed information about the entire hardware configuration e.g. memory, firmware, cpu and so on.
 $ sudo: execute a command as another user.
 $ runlevel: Print previous and current SysV runlevel.
 $ systemctl: Control the systemd system and service manager.
 $ systemctl get-default: Gets the default systemd target (runlevel) which will look up the file located at /lib/systemd/system/default.target.
-$ systemctl set-default multi-user.target: Cahnge the default systemd target (runlevel), the target is passed as second argument.
+$ systemctl set-default multi-user.target: Change the default systemd target (run-level), the required target is passed as second argument.
 $ df: report file system disk space usage
 $ stat: display file or file system status
 
 ___________________________________________________________________________
 
-Go to kernel.org to see linux kernal source code.
+Go to kernel.org to see linux kernel source code.
 
 ___________________________________________________________________________
 
-When a usb is inserted to a linux machine, the kernel device driver emits an event to the user space device manager demon called udev, then udev will create a device node assossiated with the newly attached drive in th /dev file system.
+When a usb is inserted to a linux machine, the kernel device driver emits an event to the user space device manager demon called udev, then udev will create a device node associated with the newly attached drive in the /dev file system.
 
 ___________________________________________________________________________
 
-* Booting: booting is the process of starting the operating system (Not turning on a computer).
+* Booting: Boot (to boot up, to start up or booting) a computer is to load an operating system (OS) into the computer's main memory or RAM.
 * BIOS: In computing, BIOS is firmware used to provide runtime services for operating systems and programs to perform hardware initialization during the booting process.
 
 Boot Stages:
-1- BIOS POST: POST (power on self test), POST test insures that the hardware components attached to the device are fucntioning correctly. If POST fails the computer might not be operatable, and the booting won't proceed to the next boot stage.
-2- Boot Loader (GRUB2): After succefull POST test, the BIOS loads and executes the boot code from the boot device, which is located on the first sector of the hardisk, in linux this is located in the /boot. BOOT Loader provides the user with a boot screen often with multiple options to boot into such as windows and ubunto. Once the selectoin is made at the boot screen, the BOOT Loader loads the kernel into memory supplies it with some parameters and hands over the control to the kernel. A popular example of boot loader is GRUB2 which stands for Grand Unified Boot Loader v2, and now it's the primiry Boot Loader for most linux distributions.
-3- Kernel Intialization: Kernel is usually decompressed in this stage, since it get compressed to save space. Next it's loaded to memory and starts executing, and start running tasks as intializing hardware and running memory tasks, among other things.
-4- INIT Process (systemd): Once It's completly operational the kernel looks up the INIT process to run, which sets up the user space. then mostly the systemd, which is responsible for bringing linux host to a usable state. systemd is resposible for mounting file systems, starting and managing system services.
+1- BIOS POST: POST (power on self test), POST test insures that the hardware components attached to the device are functioning correctly. If POST fails the computer might not be operable, and the booting won't proceed to the next boot stage.
+2- Boot Loader (GRUB2): After successful POST test, the BIOS loads and executes the boot code from the boot device, which is located on the first sector of the hard drive, in linux this is located in the /boot. BOOT Loader provides the user with a boot screen often with multiple options to boot into such as windows and ubuntu. Once the selection is made at the boot screen, the BOOT Loader loads the kernel into memory supplies it with some parameters and hands over the control to the kernel. A popular example of boot loader is GRUB2 which stands for Grand Unified Boot Loader v2, and now it's the primary Boot Loader for most linux distributions.
+3- Kernel Initialization: Kernel is usually decompressed in this stage, since it get compressed to save space. Next it's loaded to memory and starts executing, and starts running tasks as initializing hardware and running memory tasks, among other things.
+4- INIT Process (systemd): Once It's completely operational, the kernel looks up the INIT process to run, which sets up the user space. then mostly the systemd, which is responsible for bringing linux host to a usable state. systemd is responsible for mounting file systems, starting and managing system services.
 
 Booting is done in two ways:
-1- Start a linux process which is in a hulted or stopped state.
+1- Start a linux process which is in a halted or stopped state.
 2- Reboot or reset a linux system.
 
 
 ___________________________________________________________________________
 
 There are multiple modes linux can run on (system targets) for linux, graphical and non graphical are among them.
-To check the number of current operational mode type: runlevel. For example the graphical interface that we usually use is runlevel 5 and 3 is the non-graphical runlevel. Depinding on the runlevel mode, the booting INIT stage will run certain services. In systemd run levels are called targets.
+To check the number of current operational mode types, run thi command: runlevel. For example the graphical interface that we usually use is runlevel 5 and 3 is the non-graphical runlevel. Depending on the runlevel mode, the booting INIT stage will run certain services. In systemd run levels are called targets.
 
 ___________________________________________________________________________
 
@@ -53,31 +53,30 @@ File Types in Linux:
 1- Regular File: Images, Scripts, Configuration and Data files, etc.
 2- Directory (even a directory is a file since every thing is a file): Type of file that stores other files.
 3- Special Files: Special files can be subcategorized into 5 file types:
-    1. Character Files: These files represent devices under the /dev filesystem that allow the OS to comunicate with I/O devices (such as mouse and keyboard).
+    1. Character Files: These files represent devices under the /dev filesystem that allow the OS to communicate with I/O devices (such as mouse and keyboard).
     2. Block Files: Files that represent block devices (e.g. hard disk and RAM) located in /dev.
-    3. Links: is a way in linux to assosiate two file names to the same set of file data. And there are two types of Links, Hard Link (two or more file names with a hard link assosiate the same set of data although each of them acts as an independant file, deleting one will delete the data), second type is Soft Link (Symbolic link or pointers, alias for a file which wont delete the original file if been deleted).
-    4. Socket Files: Special files that enable the comnucation between two processes.
+    3. Links: is a way in linux to associate two file names to the same set of file data. And there are two types of Links, Hard Link (two or more file names with a hard link associate the same set of data, although each of them acts as an independent file, deleting one will delete the data), second type is Soft Link (Symbolic link or pointers, alias for a file which wont delete the original file if been deleted).
+    4. Socket Files: Special files that enable the communication between two processes.
     5. Named Pipes: Files allow connecting one files as an input to another, the data flowing from a pipe is unidirectional from first process to the second.
 
 File types identifiers:
-1- Directory (d)
-2- Regular File (-)
-3- Character File (C)
-4- Link (l)
-5- Socket File (s)
-6- Named Pipe (p)
-7- Block Device (b)
+1- Regular File (-)
+2- Directory (d)
+3- Character File (c)
+4- Block Device (b)
+5- Link (l)
+6- Socket File (s)
+7- Named Pipe (p)
 
 Filesystem Hierarchy Standard (FHS):
 - /home: home directories for all users except for the root user which is located at /.
 - /opt contains third-party programs.
-- /mnt mount filesystems temporarly in the system.
+- /mnt mount file systems temporally in the system.
 - /tmp stores temporary data.
 - /media where external media are located such as usb, use df (disk file system) command to print out details about all the mounted file systems.
 - /dev contains special blocks and character device files, this directory contains files such as the external hard disks and the mouse and keyboard.
-- /bin containes the basic programs in binary such as the cp and mv commands.
+- /bin contains the basic programs in binary such as the cp and mv commands.
 - /etc stores most of configuration files.
-- /lib place to look for shared libraies to import it into your programs.
+- /lib place to look for shared libraries to import it into your programs.
 - /usr location where all user land application where their data resides such as vi test editor.
 - /var this is the directory to which system writes data such as logs cached data. You might look here when you have issues with a system or application to see the logs.
-
