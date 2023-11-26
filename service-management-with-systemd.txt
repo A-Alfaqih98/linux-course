@@ -10,7 +10,7 @@ Creating a SYSTEMD Services
 
 * SYSTEMD services are created at /etc/systemd/system folder with a file name as <filename>.service.
 
-* The service events are automatically logged,, and can be seen using the the journalctl -u <service name> command.
+* The service events are automatically logged, and can be seen using the the journalctl -u <service name> command.
 
 * The structure of a unit file is as follows:
 1- Second is the Service section inclosed in brackets like this [Service], then a directive called ExecStart used to run a command or an application. And these two lines are enough to define a service.

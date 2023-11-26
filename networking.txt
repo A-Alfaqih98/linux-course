@@ -16,7 +16,7 @@ DNS
 
 * Systems with their names are called names as the hosts in the private network. But with a www and .com at the end its called a domain name, and it is how IP addresses translate to names in the public network.
 
-* The dot (.) in the domain it called the root. The last portion of domain name is called top level domain e.g. .com .net .sa. They represent the intent of the website, for example .com is for commercial or general purpose  and .net is for network or general purpose or and .edu is for education organizations and .org is for nonprofit organizations, etc.
+* The dot (.) in the domain which is on the far right and we usually don't write called the root, and the root domain is the top level domain and the domain name e.g. google.com. The last portion of domain name is called top level domain e.g. .com .net .sa. They represent the intent of the website, for example .com is for commercial or general purpose  and .net is for network or general purpose or and .edu is for education organizations and .org is for nonprofit organizations, etc.
 
 * In the example of www.google.com, google is called the domain name, and www is a subdomain. The subdomain help in further grouping things together under google, for example google map service is available at maps.google.com, and google storage services are available at drive.google.com, and mobile apps are at apps.google.com, and so on with mail and www. These subdomains get be divided into further subdomains based on your needs.
 
@@ -25,7 +25,7 @@ DNS
 * Your organization might choose to cache the IP for few minutes so it speeds the process next time you hit the link.
 Commands.
 
-* Even within your private network you can set similar name resolution were multiple subdomain are resolves one by one.
+* Even within your private network you can set similar name resolution were multiple subdomain are resolved one by one.
 
 * To append anything to the typed host name, go to the /etc/reolv.conf and add it to the search entry. for example if you set search to .com, next time you ping www.google it will tries www.google.com. And your host will be intelligent enough to exclude the search domain if you actually typed the full domain. for example if you pinged www.google.com.
 
@@ -43,12 +43,12 @@ Networking Basics
 
 
 
-* Switch creates a network containing systems (hosts), systems could be laptops, desktop, or VM on the cloud, etc. Each host has an interface which could be physical or virtual depending on the host, to check that interface use the ip link command. We connect the systems to the network through ethernet or wifi, then we assign the systems connected to the network ip address within the switch network using this command: ip addr add 192.168.1.10/24 dev eth0, note the ip here should be a host ip in the switch private network and eth0 is the interface name. And now, the computers can communicate (send packets to one another) to each other through the switch.
+* Switch creates a network containing systems (hosts), systems could be laptops, desktop, or VM on the cloud, etc. Each host within the switch private network has an interface which could be physical or virtual depending on the host, to check that interface use the ip link command. We connect the systems to the network through ethernet or wifi, then we assign the systems connected to the network ip address within the switch network using this command: ip addr add 192.168.1.10/24 dev eth0, note the ip here should be a host ip in the switch private network and eth0 is the interface name. And now, the computers can communicate (send packets to one another) to each other through the switch.
 
 
 * If we have a network (switch), and we want to connect it to another network, we use a router. A router can be thought of as another server (host in the switch private network) with many network ports. Since it gets connected to the two separate networks, it gets two or more IP address assigned to it, not one as normal host in the network. In other words, it is like a host that is connected to the two networks, and can enable communication between them.
 
-* In order for the systems within a private network to know where to go to access a device in another network that is connected to it's own network through a router is with Gateway configured in the systems (or a route), the Gateway is a way to the outside world. To see thi existing routing configuration in the system, run the route command. To configure the Gateway (Router IP that is connected to the private network) in the system, run the ip route add 192.168.2.0/24 via 192.168.1.1, the first IP is the other network IP, and the second IP is the router IP in the current network. And this should be done in all systems to allow full communication between the systems.
+* In order for the systems within a private network to know where to go to access a device in another network that is connected to it's own network through a router is with Gateway configured in the systems (or a route), the Gateway is a way to the outside world. To see the existing routing configuration in the system, run the route command. To configure the Gateway (Router IP that is connected to the private network) in the system, run the ip route add 192.168.2.0/24 via 192.168.1.1, the first IP is the other network IP, and the second IP is the router IP in the current network. And this should be done in all systems to allow full communication between the systems.
 
 * To get connected to the internet, first connect the router to the internet, then add a new routing table in the systems that sets the Gateway to route all traffic to the internet. To route all the traffic to the router, just use this command: ip route add default via 192.168.2.1, the default word can be changed to 0.0.0.0 it means any IP destination.
 
@@ -69,7 +69,7 @@ Troubleshooting
 
 * ping the remote server to see if we get a response, though ping might not always work cause it has to be activated at the server as well. ping works by sending packets and see if it receives any.
 
-* To troubleshoot the an issue with a route we use the traceroute {IP address} command, which will show the number of hops or devices between the source and destination. Also, it will show if there is a problem with any of the devices in the network route.
+* To troubleshoot an issue with a route we use the traceroute {IP address} command, which will show the number of hops or devices between the source and destination. Also, it will show if there is a problem with any of the devices in the network route.
 
 * To print the information of network connections use the netstat command.
 
@@ -81,7 +81,8 @@ ________________________
 Commands:
 $ ping: used to test connection with other hosts (send ICMP ECHO_REQUEST to network hosts). If ping is disabled in the other host this wont work.
 $ nslookup: query Internet name servers interactively, it's better than ping in testing dns resolution. Noting that nslookup does not consider the entries in the local /etc/hosts file.
-$ dig: DNS lookup utility, it return more details as a similar form as it is stored in a server. Noting that nslookup does not consider the entries in the local /etc/hosts file.
+$ dig: DNS lookup utility, it return more details in a similar form as it is stored in a server. Noting that dig does not consider the entries in the local /etc/hosts file.
+$ telnet: user interface to TELNET protocol.
 $ ip link: used to list and modify interfaces in the host, also it is used to check if an interface is up.
 $ ip addr: see the IP addresses assigned to the interfaces.
 $ ip addr add {IP of the network} dev eht0: used to set IP addresses in the interface names.
