@@ -3,7 +3,7 @@ Working With Shell - ||
 Commands:
 $ du (Disk Usage):Estimate file disk space usage. Use -sk option to get the size of a file or a directory in kb, or use -sh to get human readable format.
 $ ls -lh: Long list with human readable format.
-$ tar (Tape Archive): an Archiving utility (An archive file is a compressed file that contains one or more files bundled together for more accessible storage and portability), used to group multiple files or directories into single file called, use -cvf option to create tar file and to specify the file name, the third and after arguments are the files or directories to be archived. Use -tf to see the content of the tar file. Use -xf to extract the a tar file, or -zcf to compress a tar file.
+$ tar (Tape Archive): an Archiving utility (Archived file is a compressed file that contains one or more files bundled together for more accessible storage and portability), used to group multiple files or directories into single file called tarball, use -cvf option to create tar file and to specify the file name, the third and after arguments are the files or directories to be archived. Use -tf to see the content of the tar file. Use -xf to extract the a tar file, or -zcf to compress a tar file.
 
 
 ___ Compressing / decompressing Commands ___
@@ -42,7 +42,7 @@ _________________________________________________________________________
 
 * There are three data streams created when you launch linux command, Standard IN (STDIN), Standard Out (STDOUT), and Standard Error (STDERR). The STDIN is the command itself. All these streams can be redirected to a text file.
 
-* Use the forward arrow (>) symbol to redirect STDOUT to a text file or double forward arrows to append to a text file. 
+* Use the forward arrow (>) symbol to redirect STDOUT to a text file or double forward arrows (>>) to append to a text file. 
 
 * To redirect the STDERR use the 2> symbol. If file does not exist a new one will be created otherwise the file will be over written. Or, use 2>> to append the STDERR to a file.
 
@@ -57,7 +57,7 @@ ___ VI Text Editor ___
 * VI Text Editor comes out of the box for most of linux distributions.
 
 * VI has three operation modes:
-1- Command Mode: The first default mode when opening a file, the editor only understand commands in this mode. In this mode you can issue commands to the editor such as copy, paste, delete line or word.
+1- Command Mode: The first default mode when opening a file using vi, the editor only understand commands in this mode. In this mode you can issue commands to the editor such as copy, paste, delete line or word.
 2- Insert Mode: This mode allows you to type text into the file.
 3- Last Line: In this mode you can choose to save changes to the file, discard changes, or exit the vi editor.
 
@@ -90,7 +90,7 @@ Last Line:
 - Save and exit by typing (:wq).
 - Quite without saving the latest changes by typing (:q!).
 
-* An improved version of vi is vim, and in most distributions today the vi is a symbolic link to the vim editor. To check this use either of these commands:
+* An improved version of vi is vim, and in most distributions today has the vi is a symbolic link to the vim editor. To check this use either of these commands:
 1- ls -ltr /usr/bin/vi => lrwxrwxrwx 1 root root 20 Sep 28 09:56 /usr/bin/vi -> /etc/alternatives/vi
 2- file /usr/bin/vi => /usr/bin/vi: symbolic link to /etc/alternatives/vi
 
