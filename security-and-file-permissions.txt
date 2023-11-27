@@ -107,7 +107,7 @@ x = 1
 commands:
 $ chmod {ugo+r-x} {file name}: change file modes bits, this is the symbolic mode of changing file permissions. First argument represent whose permission we want to change (e.g. owner (u), group (g), or other (o) + the permission letters (r, w, x, or -)). Also, two or three permission can be passed separated by a comma like this u+rwx,g+r-x,o-rwx  noting that using minus symbol instead of plus will revoke the permission instead of granting it.
 $ chmod {750} {file name}: change file modes bits, this is the numeric mode of changing file permissions. The values used here are the octal values discussed above, each value represent a permission, first one for owner, second for group and third for others.
-$ chown {owner:group} {file name}: change file owner and group, the first argument can be the new owner and group separated by a colon or only the owner.
+$ chown {owner:group} {file name}: change file owner and group, the first argument can be the new owner and group separated by a colon or only the owner. use -R option to change all files under certain directory recursively.
 $ chgrp {group} {file name}: change group ownership.
  
 
