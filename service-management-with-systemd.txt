@@ -10,15 +10,15 @@ Creating a SYSTEMD Services
 
 * SYSTEMD services are created at /etc/systemd/system folder with a file name as <filename>.service.
 
-* The service events are automatically logged, and can be seen using the the journalctl -u <service name> command.
+* The service events are automatically logged, and can be seen using the journalctl -u <service name> command.
 
 * The structure of a unit file is as follows:
-1- Second is the Service section inclosed in brackets like this [Service], then a directive called ExecStart used to run a command or an application. And these two lines are enough to define a service.
-2- Under the Service section we can add a User with a service account, to make enable it to run the service instead of the root.
+1- First is the Service section inclosed in brackets like this [Service], then a directive called ExecStart used to run a command or an application. And these two lines are enough to define a service.
+2- Under the Service section we can add a User with a service account, to enable it to run the service instead of the root.
 3- Use the Restart directive to specify on how and when you want the service to be restarted. It can be Restart=on-failure, which will insure that the system should attempt to restart the service if it fails for some reason.
 4- Use the RestartSec directive to specify how many seconds the system should wait before restarting the services it should look like this RestartSec=10.
 5- The [Unit] section can come at the beginning before the Service section to add a description and documentation and After directives to the service, the After directives allow us to add dependencies that the services will only work after these dependencies are working, and it can look like this After=postgres.service.
-6- Third is a Install section inclosed in brackets like this [Install], and underneath it use the WantedBy directive with a value of systemd target (or run-level as graphical.target) you want to enable it for.
+6- Lastly is an Install section inclosed in brackets like this [Install], and underneath it use the WantedBy directive with a value of systemd target (or run-level as graphical.target) you want to enable it for.
 
 A full service file can look like this, lets say the service file is /etc/systemd/system/project-mercury.service:
 ___
@@ -36,7 +36,7 @@ Restart=on-failure
 RestartSec=10
 
 [Install]
-WantedBy graphical.target
+WantedBy=graphical.target
 ___
 
 
@@ -51,7 +51,7 @@ $ systemctl status <service name>: used to check the status of a service. the st
 $ systemctl stop <service name>: used to stop a service.
 $ systemctl restart <service name>: used to restart a service.
 $ systemctl reload <service name>: used to reload the service without interrupting normal functionalities.
-$ systemctl enable <service name>: used to enable a service and making  persistent to cross reboot.
+$ systemctl enable <service name>: used to enable a service and making persistent to cross reboot.
 $ systemctl disable <service name>: used to disable service at boot.
 $ systemctl edit <service name> --full: used to edit the unit file for a service, editing unit files this way apply the changes immediately without having to run the daemon-reload command. 
 $ systemctl daemon-reload: used to reload the systemctl daemon so the system can detect any changes made in the service unit files.
