@@ -1,0 +1,39 @@
+Shell Scripting.
+
+* Shell script is a file with sh extension, that includes bash bunch of commands. and can be executed through the following command: bash <sh file path>.
+
+* Shell scripts are synchronous by default.
+
+* It's possible to make a shell script and executable command and call it by its name by placing it in the /bin directory. It's best practice to not give these scripts the .sh extension. Or, instead of adding the script to the bin directory, another way is to appended the script path to then PATH variable like this: export PATH=$PATH:<script path>.
+
+* The user needs the execute permission to run the script.
+
+* Two run two commands in one line, there are four symbols:
+1- Semicolon (;): Used to run two commands in succession regardless of the result of the first command.
+2- Logical AND Operator (&&): Only run the second command if the first one is successful.
+3- Logical OR Operator (||): Only run the second command if the first one is not successful.
+
+
+* It's possible to declare and use a variable in the shell script using the, variable_name=variable_value command, and calling it using $variable_name, exactly as in normal bash terminal.
+
+* Make the result of a command a value for a variable or input for another command using the dollar sign followed by parenthesis enclosing the command as follows: variable_name=$(command).
+
+* Variables can be used with in a string by using the dollar sign then the variable_name as follows: "my path is $PATH"
+
+* It's best practice to use snake_case for naming variables with all lower case letters.
+
+* If you want to add a string to the variable when using it, place the variable in curly brackets like this: ${variable_name}<string>.
+
+* We can access arguments passed to the shell scripts from within, using the dollar sign followed by the index of the variable such as: $1. Note, the command itself is at argument of index zero ($0).
+
+* To prompt the user for input and assign this input to a variable, use the read command like this: read variable_name. To add text to the prompt use the -p flag such as: read -p "enter the variable name" variable_name.
+
+* The set -e option instructs the shell to exit immediately if any command or pipeline returns a non-zero exit status, which usually indicates an error or failure.
+
+* usermod command or modify user is a command in Linux that is used to change the properties of a user in Linux through the command line.
+
+* The evaluate expression in bash is expr, and it can be used like this: expr 4 + 6, note that the operator and values (the arguments) should be separated by a space. For multiplication use scape character then the asterisk (\*), since the asterisk is a reserved character in regex.
+
+* Another way to perform arithmetic operations is to use the double parentheses such as: echo $((A+B)), we have to assign the operation to a variable or echo it, otherwise the shell will try to execute the result as a command. Note, there is no need to have dollar symbol for variables inside the parentheses or to escape the asterisk or to have spaces. Also, we can use A++ and --A as in JavaScript.
+
+* To get floating point results use the bc utility which is a basic calculator, such as: echo 4 / 3 | bc -l. The -l flag make the utility to generate floating point results.

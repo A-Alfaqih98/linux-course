@@ -90,7 +90,7 @@ Last Line:
 - Save and exit by typing (:wq).
 - Quite without saving the latest changes by typing (:q!).
 
-* An improved version of vi is vim, and in most distributions today has the vi is a symbolic link to the vim editor. To check this use either of these commands:
+* An improved version of vi is vim, and in most distributions today has the vi as a symbolic link to the vim editor. To check this use either of these commands:
 1- ls -ltr /usr/bin/vi => lrwxrwxrwx 1 root root 20 Sep 28 09:56 /usr/bin/vi -> /etc/alternatives/vi
 2- file /usr/bin/vi => /usr/bin/vi: symbolic link to /etc/alternatives/vi
 
