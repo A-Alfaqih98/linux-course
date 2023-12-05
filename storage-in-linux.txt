@@ -3,7 +3,7 @@ Storage in Linux
 __________________________
 Disk Partition
 
-* Block device is a type of file that can be found under the /dev directory, it usually represents a piece of hardware that can stores data, traditional spinning hard disk or a solid state disk (SSD). It is called block storage cause data is read or written to it in blocks or chuck of space. To see the list of block devices in your system use the lsblk command, or run ls -l command in /dev directory and look for files with type b (block devices).
+* Block device is a type of file that can be found under the /dev directory, it usually represents a piece of hardware that can stores data, traditional spinning hard disk or a solid state disk (SSD). It is called block storage because data is read or written to it in blocks or chunks of space. To see the list of block devices in your system use the lsblk command, or run ls -l command in /dev directory and look for files with type b (block devices).
 
 * When listing block devices, each block device has Major and Minor Number (MAJ:MIN), The Major Number is used to identify the type of the block device, while Minor Numbers are used to distinguish individual physical or logical devices.
 
@@ -40,7 +40,7 @@ commands:
 $ mkfs.ext4 <device path>: create an ext2/ext3/ext4 file system for the device.
 $ mount <device path> </mnt/ext4>: mount a filesystem to the system. Note that the /mnt/ext4 directory should be created.
 $ mount | grep <device path>: check if the file system is mounted.
-$ df -hP | grep <device path>: report file system disk space usage, and with this flag can check if the file system is mounted.
+$ df -hP | grep <device path>: report file system disk space usage, and with this flag we can check if the file system is mounted.
 
 __________________________
 
@@ -50,9 +50,9 @@ DAS, NAS, and SAN
 
 1- DAS: Direct Attached Storage, this storage has fast response since it is attached to the host, but it is only ideal for small businesses since it is dedicated to single host.
 
-2- NAS: Network Attached Storage, the NAS device are generally located apart from the host that will consume space from it, the data storage between the storage and the host is through the network. NAS is a file storage device unlike DAS and SAN that are block storage devices. The storage that is provided to the host is in a form of a directory or a share that is physically present in the NAS device but exported via NFS (Network File System) to the host. This type of storage is ideal for centralized shared storage that needs to be accessed simultaneously by different hosts, and can be used as the backend storage for web-servers or application-servers. Also can run data bases, although that is not recommended for production work loads, neither it is recommended for  to install OS.
+2- NAS: Network Attached Storage, the NAS device are generally located apart from the host that will consume space from it, the data storage between the storage and the host is through the network. NAS is a file storage device unlike DAS and SAN that are block storage devices. The storage that is provided to the host is in a form of a directory or a share that is physically present in the NAS device but exported via NFS (Network File System) to the host. This type of storage is ideal for centralized shared storage that needs to be accessed simultaneously by different hosts, and can be used as the backend storage for web-servers or application-servers. Also can run data bases, although that is not recommended for production work loads, neither it is recommended for installing OS.
 
-3- SAN: Storage Area Network, it provides block storage used by enterprises for business critical applications that needs to deliver high and low latency. Storage are allocated to hosts in a form of a Logical Unit Numbers (LUN), which is a range of blocks provisioned from a pool of a pool of shared storage and presented to the server as a logical disk. The hosts system will detects the storage as a row disk, we can then create partitions and file systems on top of it as we would with any other block device, and then mount it on the system to store data. SAN can be ethernet based, but it mainly make use of the FCP which stands for Fiber Channel Protocol, this a high speed data transfer protocol that make use of the fiber channel switch to establish communication with the host. Major advantage of SAN over NAS, that it can be used to host mission critical applications and databases due to its vastly superior performance and reliability.
+3- SAN: Storage Area Network, it provides block storage used by enterprises for business critical applications that needs to deliver high and low latency. Storage are allocated to hosts in a form of a Logical Unit Numbers (LUN), which is a range of blocks provisioned from a pool of shared storage and presented to the server as a logical disk. The hosts system will detects the storage as a row disk, we can then create partitions and file systems on top of it as we would with any other block device, and then mount it on the system to store data. SAN can be ethernet based, but it mainly make use of the FCP which stands for Fiber Channel Protocol, this a high speed data transfer protocol that make use of the fiber channel switch to establish communication with the host. Major advantage of SAN over NAS, that it can be used to host mission critical applications and databases due to its vastly superior performance and reliability.
 
 Note, throughput is a measure of how many units of information a system can process in a given amount of time.
 
