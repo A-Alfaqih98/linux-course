@@ -1,14 +1,19 @@
 Shell Scripting.
 
-* Shell script is a file with sh extension, that includes bash bunch of commands. and can be executed through the following command: bash <sh file path>.
+________________________________________________
+
+Introduction
+
+
+* Shell script is a file with sh extension, that includes bunch of bash commands that runs in one terminal session. and can be executed through the following command: bash <sh file path>.
 
 * Shell scripts are synchronous by default.
 
-* It's possible to make a shell script and executable command and call it by its name by placing it in the /bin directory. It's best practice to not give these scripts the .sh extension. Or, instead of adding the script to the bin directory, another way is to appended the script path to then PATH variable like this: export PATH=$PATH:<script path>.
+* It's possible to make a shell script and executable command and call it by its name by placing it in the /bin directory. It's best practice to not give these scripts the .sh extension. Or, instead of adding the script to the bin directory, another way is to append the script path to the PATH variable like this: export PATH=$PATH:<script path>.
 
 * The user needs the execute permission to run the script.
 
-* Two run two commands in one line, there are four symbols:
+* To run two commands in one line, there are four symbols:
 1- Semicolon (;): Used to run two commands in succession regardless of the result of the first command.
 2- Logical AND Operator (&&): Only run the second command if the first one is successful.
 3- Logical OR Operator (||): Only run the second command if the first one is not successful.
@@ -18,7 +23,7 @@ Shell Scripting.
 
 * Make the result of a command a value for a variable or input for another command using the dollar sign followed by parenthesis enclosing the command as follows: variable_name=$(command).
 
-* Variables can be used with in a string by using the dollar sign then the variable_name as follows: "my path is $PATH"
+* Variables can be used within a string by using the dollar sign then the variable_name as follows: "my path is $PATH"
 
 * It's best practice to use snake_case for naming variables with all lower case letters.
 
@@ -26,7 +31,7 @@ Shell Scripting.
 
 * We can access arguments passed to the shell scripts from within, using the dollar sign followed by the index of the variable such as: $1. Note, the command itself is at argument of index zero ($0).
 
-* To prompt the user for input and assign this input to a variable, use the read command like this: read variable_name. To add text to the prompt use the -p flag such as: read -p "enter the variable name" variable_name.
+* To prompt the user for input and assign this input to a variable, use the read command like this: read variable_name. To add text to the prompt use the -p flag such as: read -p "enter the variable value" variable_name.
 
 * The set -e option instructs the shell to exit immediately if any command or pipeline returns a non-zero exit status, which usually indicates an error or failure.
 
@@ -36,4 +41,155 @@ Shell Scripting.
 
 * Another way to perform arithmetic operations is to use the double parentheses such as: echo $((A+B)), we have to assign the operation to a variable or echo it, otherwise the shell will try to execute the result as a command. Note, there is no need to have dollar symbol for variables inside the parentheses or to escape the asterisk or to have spaces. Also, we can use A++ and --A as in JavaScript.
 
-* To get floating point results use the bc utility which is a basic calculator, such as: echo 4 / 3 | bc -l. The -l flag make the utility to generate floating point results.
+* To get floating point results use the bc utility which is a basic calculator, such as: echo 4 / 3 | bc -l. The -l flag make the utility generate floating point results.
+
+
+________________________________________________
+
+
+Flow Control
+
+- If Statement
+
+* if conditionals in shell scripts start with "if" followed by the condition, followed by "then", and closed by "fi", and the condition of if statement is encapsulated in square brackets. Also we can make use of elif and else statements,such as follows:
+if [ x = 1 ]
+then
+    x = $((x + 1))
+elif [ x = 2 ]
+then
+    x = x
+else
+    x = 2
+fi
+
+Note that the conditions needs the spaces between the brackets, variables, and symbols.
+
+* Equal operator is to compare strings (=, !=), and for numbers we use (-eq, -ne, -gt, -lt).
+
+* Set two conditions using && and ||.
+
+* Using the double square brackets allow for modified conditionals symbols, such as strings bigger than and lower than, and regex condition.
+
+* Also there are file level operators as follows:
+1- [ -e <file path> ]: check if file exist.
+2- [ -d <file path> ]: check if a file is a directory.
+3- [ -s <file path> ]: check if file exist and has size greater then zero.
+4- [ -x <file path> ]: check if file is executable.
+5- [ -w <file path> ]: check if file writable.
+6- [ -z $1 ]: check if a command line argument is entered.
+
+
+- For Loop
+
+* Start the for loop with "for" then the content or array we want to loop over, the "do" which takes the action, and finally "done".
+For example:
+for i in {1..10}
+do
+    echo $i
+done
+
+* We can cat the content of some file and loop over the rows, note the we need to encapsulate the cat command in $() as follows:
+# for variable:
+array=(1 2 3)
+
+for i in $array
+do
+    echo $i
+done
+
+# for text file
+for i in $(cat letters.txt)
+do
+    echo $i
+done
+
+# pass the items directly
+for i in 1 2 3
+do
+    echo $i
+done
+
+# javascript syntax
+for ((i=0; i <= 10; i++))
+do
+    echo $i
+done
+
+* word count in each file in a directory
+for file in $(ls)
+do
+    echo Line count of $file is $(cat $file | wc -l)
+done
+
+* also we can apt install packages listed in text file, or we can ssh to servers and do certain command each time.
+
+* while loop can take continue and break statements as in javascript:
+while [ 1 -eq $((2-1)) ]
+do 
+if [ 1 -gt 2 ]
+then
+    continue
+fi
+echo hello
+break
+done
+
+* Case can also be used for simpler syntax:
+i=1
+while [ 1 -eq $((2-1)) ]
+do 
+
+case $i in
+    1) echo $((i++)) ;;
+    2) echo $((i++)) ;;
+    3) echo $((i++)) ;;
+    4) echo $((i++)) ;;
+    5) echo $((i++)) ;;
+    *) break ;;
+esac
+
+done
+
+
+________________________________________________
+
+Shebang
+
+* Since some of the syntax we discussed earlier only works for bash shell, we can use shebang on the top of the script which let the shell know what shell we want to run this script in, and it looks like this #!<shell path>, usually it is bash shell that we need to run the script in so:
+#!/bin/bash
+
+Exit Code
+
+* Every command return exit status when if being ran, when it's completed successfully it return "EXIT STATUS = 0", otherwise it returns "EXIT STATUS > 0".
+
+* To see the Exit Code of a command run $? after running a particular command, note that the error is only available once after right after a command finished using this method.
+
+* To exit a code with certain exit code use this command:
+exit <Exit Code Number>
+
+
+Functions
+
+* We can define a function in bash using similar syntax to Javascript, and the returned value can be captured as an exit code using $?.
+While return will acts like exit code in bash, the echo acts as return, so we can assign the result of echos to a variable:
+function mirror(){
+
+    echo "First Argument is:"
+    echo $1
+
+    local local_variable="I'm a local variable"
+    global_variable="I'm a global variable"
+
+    return 55
+}
+
+result=$(mirror 44)
+
+echo $?
+mirror 44
+echo $result
+echo $local_variable
+echo $global_variable
+
+
+* Finally, run your script against shellcheck package after downloading it to get mistakes and recommendations.
