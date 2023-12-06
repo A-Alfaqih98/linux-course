@@ -186,7 +186,7 @@ function mirror(){
 result=$(mirror 44)
 
 echo $?
-mirror 44
+mirror 
 echo $result
 echo $local_variable
 echo $global_variable
