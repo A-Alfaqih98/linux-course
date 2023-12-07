@@ -29,7 +29,7 @@ $ echo: display line of text, or the value of the ENVIRONMENT-VARIABLE if it sta
 $ env: check all environment variables
 $ export: set a new environment variable (export OFFICE=caleston), if done without export, it will be a session variable not environment one.
 $ cd: change directory (running cd without argument will go to home directory regardless of the current location)
-$ pwd: present working directory
+$ pwd: print working directory
 $ mkdir: make directory (takes folder names as arguments or folder paths such as existing-parent/child) or use -p flag to create the parent directory as well if not already created.
 $ type: check command type.
 $ uptime: Shows information about how long the system been running for after the last reboot.
