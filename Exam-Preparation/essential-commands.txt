@@ -1,0 +1,30 @@
+Log into local & remote graphical and text mode console
+
+* There are four types of logging in:
+1- Local text-mode console
+2- Local graphical-mode console
+3- Remote text-mode login (OpenSSH). Before ssh there was telnet communication protocol, but it isn't encrypted. 
+4- Remote graphical-mode login
+
+commands:
+$ ip a: used to check which ip your machine uses (check for inet section ip)
+
+__________________________________________________________________
+
+Read and use system documentation
+
+* Use --help before jumping to man pages to save time, unless you want to dive deep into the command.
+
+* The top of --help and man pages, include the syntax of the command.
+
+* man provides other options apart from printing the whole manual page, such as whatis with -f and apropos with -k, to check these option, look at the manual of the man command (man man). Note that apropos needs a database that can be created manually using $sudo mandb command.
+
+* Use the -s command with either apropos command or man -k followed by range of section numbers like this: $man -k -s 1,5 <word> to get the results from targeted sections.
+
+* Also, When using man man command you will see that you can select the section which of you want a manual page from e.g. Executable, System Calls, library, and so on. This helps when there are multiple commands with the same name.
+
+* To save time, use tab to auto complete a command, or after typing a command press "space" then double tab to get some recommended options for this command. This could even work for nested commands.
+
+commands:
+$ mandb: create or update the manual page index caches.
+__________________________________________________________________
