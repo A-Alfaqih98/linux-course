@@ -1,0 +1,61 @@
+Compare and manipulate file content
+
+commands:
+
+$ tac <file path>: cat in reverse.
+
+$ tail -n <lines number> <file path>: output the last part of files, by default it shows last ten lines, change it using -n option.
+
+$ head -n <lines number> <file path>: output the first part of files, by default it shows last ten lines, change it using -n option.
+
+$ sed <'s/heelo/hello/g'> <file path>: stream editor for filtering and transforming text. Wrapping the expression or any content with single quote will let bash know to not interpret that expression or content. some expression arguments:
+1- s:  substitute (search and replace).
+2- g: global, normally sed will only change the first occurrence in every line, with g it will change all occurrences in every line
+
+* $sed will print the edited text to the terminal, use the --in-place (-i) option, to edit the file.
+
+$ cut -d ' ' -f 1 <file path>: remove sections from each line of files, -d for delimiter (as argument to split(delimiter) with in javascript), -f for fields to extract. And result can be redirected.
+
+$ sort <file path>: sort lines of text files.
+
+$ uniq <file path>: report or omit repeated lines, though this will only remove adjacent duplicates, so we can sort first to overcome this.
+
+$ diff <file1> <file2>: compare files line by line, 1c1 means that line one in file1 one is changed from line 1 in file 2, and the greater and less than symbols points to the file (file1 <, > file2). Some options:
+-c: give context, all the file will be shown with exclamation mark (!) for the differ lines, for added or removed content we will see + or -.
+-y: shows differences side by side, and the differ lines will be marked with pipe (|). This might be the best way.
+
+$ sdiff: another way for side by side diff, similar to diff -y. pipe symbol (|) shows difference in line, and grater or less than show lines that only exist in file2 or file1. 
+
+* Pagers are programs that allows you to open multiple pages of text and navigate through them while in the terminal, the two pagers that we are going to look at are more and less, though less is more feature rich than more.
+
+$ less <file path>:
+1- Navigate up and down with arrows.
+2- Search for instances using "/", and go to next match with "n", and move upward with capital "N". 
+3- To make the search case insensitive use -i option.
+
+* vim <file path>:
+1- Search for instances using "/", and make case insensitive by following the pattern with "\c".
+2- Navigate lines with with colon (exit mode) and line number e.g. ":12".
+3- To cut lines press "dd".
+
+
+- Regular Expressions, can be used with search commands as $grep to get advanced searching patterns, here are some symbols and instructions:
+1- ^ = "The line begins with", example: $ grep '^sam' names.txt
+2- $ = "The line ends with", example: $ grep 'sam$' names.txt
+3- . = "Match any One character in that spot", example: $ grep -r 'c.t' /etc/
+4- \ = "Escaping for special characters", example: $ grep '\.' /etc/login.defs 
+5- * = "Match the previous element 0 or more times", example: $ grep -r 'let*' /etc/
+6- .* = "Combining dot for any letter and * for any number times of repeated character to get wild card", example: $ grep -r '/.*/' /etc/
+7- + = "Match the previous element 1 or more times", example: $ grep -r '0\+' /etc/ or $ egrep -r '0+' /etc/
+8- {<number>,} = "Previous element can exist this many times at least", example: $ egrep -r '0{3,}' /etc/
+9- {,<number>} = "Previous element can exist this many times at most", example: $ egrep -r '10{,3}' /etc/
+10- {<min number>, <max number>} = "Previous element can exist this a number of times in this range", example: $ egrep -r '0{3,5}' /etc/
+11- {<number>} = "Previous element can exist exactly this a number", example: $ egrep -r '0{3,5}' /etc/
+12- ? = "Make the previous element optional", example: $ egrep -r 'disabled?' /etc/
+13- | = "Or operator", example: $ egrep -r 'disabled|enabled' /etc/
+14- [] = "Range[a-z or 0-9] or Sets[abz954]", example: egrep -r 'c[au]t' /etc/
+15- () = "Sub-expressions, allow to pull out specific sections of", example egrep -r '/dev/(([a-z]|[A-Z])*[0-9])' /etc/
+16- [^] = "Negate ranges or sets", example: $ egrep -r 'http[^s]' /etc/ or egrep -r '/[^a-z]' /etc/
+
+
+Note: Check grep manual to see more info as the meta-characters should be escaped in basic regular expression such as (+, ?, {, and |), or use extended regex with -E flag so you don't need to escape special characters. Or just use $egrep command. Also, note that regular expressions (regex) or not limited to $grep, it can be used with $sed and many more uses.

@@ -27,13 +27,16 @@ Read and use system documentation
 
 commands:
 $ mandb: create or update the manual page index caches.
+
+
+
 __________________________________________________________________
 
 Create and Manage Links
 
 * File systems like ext4 and others, keep track of data in files with the help of "Inode". A file data blocks could be scattered all over the desk, and Inode remembers where all pieces are stored as well as tracking the metadata, things like permission and access time.
 
-* Every file has an Inode number that can be seen using the stat command, though we use the file path instead cause it's simpler. The file point to the Inode number and inode point to all blocks of data that we require.
+* Every file has an Inode number that can be seen using the stat command, though we use the file path instead cause it's simpler. The file points to the Inode number and inode points to all blocks of data that we require.
 
 * When a file is created, linux will group this file's data blocks under Inode number, then a hard link is created to link the file name/path to the Inode number. The number of links for a file can be shown by the stat command.
 
@@ -41,9 +44,9 @@ Create and Manage Links
 
 * Instead of copying the file for another user for instance, we can hard link it to them to save the space of duplicating the data in the disk.
 
-* Hard link will create a file that point to the same Inode as another file.
+* Hard link will create a file that points to the same Inode as another file.
 
-* If there are more than one hard link for a file, deleting one of them will not delete the the Inode, thus the other file will not be affected. If the last link is deleted, and the Inode has zero links, the data itself will be erased from the desk.
+* If there are more than one hard link for a file, deleting one of them will not delete the the Inode. Thus, the other file will not be affected. If the last link is deleted, and the Inode has zero links, the data itself will be erased from the desk.
 
 * limitations and considerations of hard links:
 1- Hard links can only be made to normal files, but not directories.
@@ -60,13 +63,13 @@ $ ln <source file path> <destination file path>: create a new file and hard link
 
 * Soft link or a symbolic link will create a file that points to a path. Unlike hard links, soft links will not point to the Inode. It's almost like a text file with the path to another file or directory inside.
 
-* When using ls -l command to view a folder the soft link in it, we can see that the file type is l (soft link), and the file name points to another file.
+* When using ls -l command to view a folder with soft link in it, we can see that the file type is l (soft link), and the file name points to another file.
 
-* The permission of a soft link does not matter, thats why all permissions will be given to the soft link. The original file permission will be applied when dealing with the soft link.
+* The permission of a soft link does not matter, that's why all permissions will be given to the soft link. The original file permission will be applied when dealing with the soft link.
 
 * Changing the name of the original file, will break the soft link, you can see broken links highlighted in red in the output of ls -l command.
 
-* It's possible to make a soft link for a directory as well as making soft links between files in two file systems.
+* It's possible to make a soft link for a directory as well as making soft links between files in different file systems.
 
 
 
@@ -80,12 +83,12 @@ File Permissions
 
 * The user owner can only be changed with $chown by the root user.
 
-* Since directories data is the files inside it, the read (r), write(w), and execute(x) permissions, does not work the same way as files. In directories here is how permission bits work:
+* Since directories data is the files inside it, the read(r), write(w), and execute(x) permissions, does not work the same way as files. In directories here is how permission bits work:
 r- Read directory, run commands like ls to view the content of a directory
 w- Write to directory, begin able to create and delete files in a directory with commands like mkdir and rm.
 x- Execute into directory, being able to $cd into the directory.
 
-* If a directory is accessible, the read and write permissions will be enabled.
+* If a directory is accessible, the read and execute permissions will be enabled.
 
 * $stat command shows the permission in both symbolic and octal form. Note that the first octal value will be special permission fo set uid and set gid and the sticky bit.
 
@@ -95,3 +98,63 @@ x- Execute into directory, being able to $cd into the directory.
 commands:
 $ groups: print the groups a user is in.
 $ chmod g=r <file name>: with equal symbol (=) it's possible to set group permission only to read ,regardless of the previous permissions, leaving the permission bits will remove all permissions This works for all permissions and parties.
+
+
+
+__________________________________________________________________
+
+SUID, SGID, and Sticky Bit
+
+* When SUID (set uid) is set to a file, it means to execute the file as the owner of the file instead of the user running that file. That is helpful with commands like su (switch user) or passwd to change your own password as a regular user.
+
+* To set SUID permission use the $chmod command, but start the octal values with 4 to allow execute by others as the owner, and the execute bit for the user will be s like this: -rwsrw-r--.
+Example: $ chmod 4766 <file path>
+
+* If the owner has no execute permission, instead of lowercase s it will be uppercase S. So, the S means that the SUID is enabled but not necessarily has the execute permission.
+
+* SGID (set gid) is similar to SUID, but instead it's going to apply to group instead of owner permission. To set the GUID start the octal values in $chmod command with 2.
+Example: $ chmod 2674 <file path> => -rw-rwsr--
+
+* We can set both SUID and SGID by starting the octal bit with 6 (4+2).
+Example: $ chmod 6674 <file path> => -rwSrwsr--
+
+* Sticky Bit is usually set in directories that are shared between people, and it will allow only root user and an owner of a file in that directory to be able to delete that file.
+
+* To add Sticky Bit, lead the four octal values with 1 or use +t, the sticky bit will be shown at the end of the permissions as a lowercase t if the owner has execute permission and uppercase T if he doesn't.
+Example: $ chmod 1755 <file path> => drwxr-xr-t
+
+
+commands:
+$ find . -perm /4000: find file with SUID permission, or we can search for GUID with 2000 or both with 6000. note that only the first octal value matters here.
+
+
+__________________________________________________________________
+
+Search for Files
+
+* find command syntax: $ find <path to directory> <options> <search parameters>
+
+Some options and parameters:
+1- Use i before -name to make it case insensitive => -iname
+2- Use wild card (*) so search any thing before or after a pattern: "*.jpg"
+3- Use -mmin to look for files modified in some minute, 5 in the previous fifth minute only, -5 now till the fifth minute, +5 the previous fifth minute and before (to infinity).
+4- Use -mtime to look for files with modify time in 24 hours format.
+5- Use -cmin to look for files with change minute. change(c) is for file metadata (like permissions) and modify(m) is for file content.
+6- Use -size to find files with size, use c for bytes, k for kilobytes, M for megabytes, and G for gigabytes. Use +512k to get files larger than the specified size and -512k for smaller files.
+7- Use "-type d" to specify file type, in this example we are searching for directory.
+8- Use -perm 664 to find files with specific permissions. use -644 to say files with at least 664 permission, or use /644 to get files with any of the given permissions (/o=rw it will match if o has either r or w), it's kind of the opposite of -664. or use symbolic way -perm -u=rw,g=rw,o=r
+
+* Combine option and parameters by listing them next to each other which will work as AND operator, or add -o flag in between for OR operator:
+Example: find -name "*f" -size 512k
+Example: find -name "*f" -o -size 512k
+
+* And for NOT operator, use the -not or \! flag:
+Example: find -not -name "f"
+
+
+commands
+$ find <directory path> -name <rgex e.g '*.jpg'>: look for all jpg files.
+$ find /lib64/ size +10M: search for files larger than 10mb.
+$ find /dev/ -mmin -1: search for files modified last minute.
+
+
