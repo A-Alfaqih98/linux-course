@@ -26,7 +26,7 @@ $ diff <file1> <file2>: compare files line by line, 1c1 means that line one in f
 
 $ sdiff: another way for side by side diff, similar to diff -y. pipe symbol (|) shows difference in line, and grater or less than show lines that only exist in file2 or file1. 
 
-* Pagers are programs that allows you to open multiple pages of text and navigate through them while in the terminal, the two pagers that we are going to look at are more and less, though less is more feature rich than more.
+* Pagers are programs that allows you to open multiple pages of text and navigate through them while in the terminal, the two pagers that we are going to look at are more and less, though less is more feature-rich than more.
 
 $ less <file path>:
 1- Navigate up and down with arrows.
@@ -50,7 +50,7 @@ $ less <file path>:
 8- {<number>,} = "Previous element can exist this many times at least", example: $ egrep -r '0{3,}' /etc/
 9- {,<number>} = "Previous element can exist this many times at most", example: $ egrep -r '10{,3}' /etc/
 10- {<min number>, <max number>} = "Previous element can exist this a number of times in this range", example: $ egrep -r '0{3,5}' /etc/
-11- {<number>} = "Previous element can exist exactly this a number", example: $ egrep -r '0{3,5}' /etc/
+11- {<number>} = "Previous element can exist exactly this number", example: $ egrep -r '0{3}' /etc/
 12- ? = "Make the previous element optional", example: $ egrep -r 'disabled?' /etc/
 13- | = "Or operator", example: $ egrep -r 'disabled|enabled' /etc/
 14- [] = "Range[a-z or 0-9] or Sets[abz954]", example: egrep -r 'c[au]t' /etc/
@@ -58,4 +58,4 @@ $ less <file path>:
 16- [^] = "Negate ranges or sets", example: $ egrep -r 'http[^s]' /etc/ or egrep -r '/[^a-z]' /etc/
 
 
-Note: Check grep manual to see more info as the meta-characters should be escaped in basic regular expression such as (+, ?, {, and |), or use extended regex with -E flag so you don't need to escape special characters. Or just use $egrep command. Also, note that regular expressions (regex) or not limited to $grep, it can be used with $sed and many more uses.
+Note: Check grep manual to see more info as the meta-characters should be escaped in basic regular expression such as (+, ?, {, and |), or use extended regex with -E flag so you don't need to escape special characters. Or just use $egrep command. Also, note that regular expressions (regex) are not limited to $grep, it can be used with $sed and many more uses.

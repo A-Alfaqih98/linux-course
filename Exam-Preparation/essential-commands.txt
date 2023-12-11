@@ -158,3 +158,13 @@ $ find /lib64/ size +10M: search for files larger than 10mb.
 $ find /dev/ -mmin -1: search for files modified last minute.
 
 
+__________________________________________________________________
+
+$tar (Tape Archive): archive number of files and directories in one file for easier compressing.
+
+commands:
+$ tar --create --file < tar file name> <path for directory or file to archive>: create tarball for a folder, you can use -cf flag instead.
+$ tar --list --file <tar file>: list before extracting from tar archive to know where your extracted files will end up. you can use -tf instead.
+$ tar --extract --file archive.tar --directory <path to extract tarball in>: extract tar archive in a given path, you can use -xf and -C for extracting path.
+
+Note, -f should be at the end.
