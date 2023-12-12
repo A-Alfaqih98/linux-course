@@ -1,0 +1,29 @@
+Basic Git Operations
+
+
+* Git is a Distributed version control system.
+
+* Basic regex can be used in git commands like adding or committing fils e.g. $ git add "*.html", to add all files of html extension.
+
+
+commands:
+$ git config --global user.name "myName": this info will show for other users when you make a change for, since we set global flag it will use the info for all other local repos we create in the future.
+$ git config --global user.email "myEmail": this info will show for other users when you make a change.
+$ git init: used inside a directory to initialize a git local repository for that directory.
+$ cat .git/config: see the git repository info.
+$ git reset <file>: un-stage a file (reverse add).
+$ git rm <file>: remove file from directory and stage this change.
+$ git status: show the working tree status.
+$ git branch <branch name>: create a branch.
+$ git branch --delete: delete a branch.
+$ git branch: list branches.
+$ git checkout <branch name>: change working branch, HEAD will point to the specified branch.
+$ git commit -a -m <"commit message">: add and commit at once.
+$ git log: show commit logs for current branch, use --raw for more information, and the --oneline to git one liner logs.
+$ git show <commit hash>: show commit details and changes.
+$ git merge <branch to merge>: merge a branch to the current branch.
+$ git remote -v: check if any remote repository is associated with the local repository.
+$ git remote add origin <remote repository connection string>: set a remote repository for the local one, the connection string should preferably be ssh not http. Note that origin is the default alias to the connection string, so next time we push or pull to origin it will pull or pull to that connection string.
+$ git push origin <branch name e.g main>: push local commits to the remote repository in the main branch
+$ git push: push commit to remote repository
+$ git pull: pull commit from remote repository
