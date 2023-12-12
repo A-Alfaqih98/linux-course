@@ -168,3 +168,75 @@ $ tar --list --file <tar file>: list before extracting from tar archive to know 
 $ tar --extract --file archive.tar --directory <path to extract tarball in>: extract tar archive in a given path, you can use -xf and -C for extracting path.
 
 Note, -f should be at the end.
+
+__________________________________________________________________
+
+Compression and Decompression Utilities
+
+* Most linux systems will have at least three compression utilities installed, gzip, bzip2, and xz. Compressing files will not only help in saving space in the desk, but also, it will help in transferring files from one system to another much faster.
+
+commands:
+The following commands only compress files, and does not archive and package multiple files.
+$gzip <file>, $gzip --decompress <file>, $gunzip <file>.
+$bzip2 <file>, $bzip2 --decompress <file>, $bunzip <file>.
+$xz <file>, $xz --decompress <file>, $unxz <file>.
+Note, we can use --keep (-k) to the original file. Look for more options if needed.
+
+Use $zip command for both packaging and compressing files.
+$ zip <wanted archive name> <file>: to archive and compress a file.
+$ zip -r <wanted archive name>  <directory>: to pack and compress a directory.
+$ unzip <zipped filed>: to unpack and decompress.
+$ tar (--create --gzip --file | czf) <tar file name> < file to compress>: pack and compress file.
+
+__________________________________________________________________
+
+Backup files to a remote system
+
+* One of the tools that allows sync of a local directory to a remote one is $rsync (remote synchronization), it needs ssh daemon to be running on the remote server.
+
+$ rsync -a <local directory>/ <remote user>@<remote server>:<remote directory>/: this will sync the local directory to a remote one, -a (archive) option will make sure subdirectories and permission and metadata are preserved inside the directory. Make sure to have / at the end of the directories paths.
+
+* If the command got ran again, it will only copy data that has changed and skip old data that are still up to date.
+
+* Reverse the local directory with the remote one to reverse the synchronization:
+rsync -a <remote user>@<remote server>  <local directory>/
+
+* It's possible to sync to local directories like this:
+$ rsync -a <directory1>/ <directory2>/
+
+* It's possible to backup entire disk or partition which take picture of all the data on the disk or partition in exact bit by bit copy, which is known as "imaging". this can be done using $dd command.
+
+* Before backing up or taking image of a disk or partition, make sure to unmount that disk or partition so not data isn't being changed while this disk or partition is backing up.
+
+$ sudo dd if=<disk to backup> of=<output file> bs=<block size e.g. 1M> status=progress:
+- if: input file
+- of: output file.
+- bs: block size, set this to speed up the process.
+- status: set to progress to tell dd to show the progress it's making.
+
+* Reverse the if and of labels to store a backup to a disk:
+$ sudo dd if=<diskimage.raw> of=<disk to backup in>  bs=<block size e.g. 1M> status=progress:
+
+Note running this command on a virtual machine will overwrite your virtual disk.
+
+__________________________________________________________________
+
+Use Input-Output Redirection
+
+* We call the > redirection, because programs has a default location where they will send the out put to, which is normally the terminal windows and that is to our screen, so we redirect the output location to somewhere else, that's why we call it redirection.
+
+< : STDIN, one use case is to pass file to a utility e.g. $ cat < hello.txt
+1> or >: STDOUT
+2>: STDERR
+
+Example of using STDOUT and STDERR: $ grep -r '^The' /etc/ 1>>output.txt 2>>error.txt
+
+* To direct both STDOUT and STDERR to one file, use the command this way:
+$ grep -r '^The' /etc/ 1>>output.txt 2>&1, 2>&1 means redirect STDERR to STDOUT.
+
+* Another use of STDIN redirection (<), is Here document, where you specify when to end input by, for example:
+$ sort <<EOF: now sort will prompt for input and once "EOF" is entered the prompt will end. Note, any text can be used instead of EOF (End Of File), but EOF is commonly used.
+$ bc <<<1+2+3+4, this allows passing text to the program instead of open the command prompt for keyboard input.
+
+
+$ grep -v '^#' /etc/login.defs | sort | column -t: column utility arrange the columns nicely, -t is for table output.
