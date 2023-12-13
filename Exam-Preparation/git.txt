@@ -7,7 +7,7 @@ Basic Git Operations
 
 
 commands:
-$ git config --global user.name "myName": this info will show for other users when you make a change for, since we set global flag it will use the info for all other local repos we create in the future.
+$ git config --global user.name "myName": this info will show for other users when you make a change, since we set global flag it will use the info for all other local repos we create in the future.
 $ git config --global user.email "myEmail": this info will show for other users when you make a change.
 $ git init: used inside a directory to initialize a git local repository for that directory.
 $ cat .git/config: see the git repository info.
@@ -19,7 +19,7 @@ $ git branch --delete: delete a branch.
 $ git branch: list branches.
 $ git checkout <branch name>: change working branch, HEAD will point to the specified branch.
 $ git commit -a -m <"commit message">: add and commit at once.
-$ git log: show commit logs for current branch, use --raw for more information, and the --oneline to git one liner logs.
+$ git log: show commit logs for current branch, use --raw for more information, and the --oneline to git one liner logs or just use $ git reflog.
 $ git show <commit hash>: show commit details and changes.
 $ git merge <branch to merge>: merge a branch to the current branch.
 $ git remote -v: check if any remote repository is associated with the local repository.
@@ -27,3 +27,5 @@ $ git remote add origin <remote repository connection string>: set a remote repo
 $ git push origin <branch name e.g main>: push local commits to the remote repository in the main branch
 $ git push: push commit to remote repository
 $ git pull: pull commit from remote repository
+$ git revert <commit hash>: delete a published commit, follow it by push to revert the commit from remote repository as well. Note, this will create new commit which doesn't contain the reverted branch or branches.
+$ git reset --hard <hash commit>: will go back to the selected commit and delete all commits on the way.

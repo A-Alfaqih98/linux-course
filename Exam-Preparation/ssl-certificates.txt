@@ -7,17 +7,17 @@ TLS: Transport Layer Security
 
 * Certificates solve two problems:
 1- Authenticate a website, so the user don't enter their data to a website clone created by a hacker. Authentication means that the website can cryptographically prove to a browser that it is legitimate
-2- Encrypt network traffic between user and website, so data isn't stolen as it begin sent through the network.
+2- Encrypt network traffic between user and website, so data isn't stolen as it being sent through the network.
 
 * Openssl is the most used utility to create and manage certificates in linux, the tool has many more feature such as cryptography operations. Although its name is Openssl, it can be used to create TLS certificates as well.
 
 * Here we are interested in the creation of X.509 certificates which we can use in a website to do authentication and encryption.
 
-* We need to sign our certificates from an authorized company to sign our certificates such as google. They will use a private key to sign our certificates, then the browsers can check the certificate legitimacy. These these companies are called certificates authorities.
+* We need to sign our certificates from an authorized company to sign our certificates such as google. They will use a private key to sign our certificates, then the browsers can check the certificate legitimacy. These companies are called certificates authorities.
 
 * Also we can use our certificates for our local networks, by configuring our computers to trust our local certificates.
 
-* At the beginning and end of a certificate we can see that it is a certificate not and CSR.
+* At the beginning and end of a certificate we can see that it is a certificate and not CSR.
 
 * Certificates can be decoded so we can look at the details.
 
@@ -26,9 +26,7 @@ TLS: Transport Layer Security
 * Since openssl is a big tool, it has multiple manuals, one for each sub command. For example: $ man openssl-req. Note the the req and x509 sub-commands are the most ones we are going to use here.
 
 commands:
-$ openssl or openssl help: the will give us the different commands that we can use.
-$ openssl req -newkey rsa:2048 -keyout key.pem -out req.pem: generate private key and a certificate signing request (CSR). This will generate two files: req.pem and key.pem, then we can send these to a certificate authority.
-$ openssl req -x509 -noenc -newkey rsa:4069 -days 365 -keyout key.pem myprivate.key -out mycertificate.crt: here we can do the same thing but with signing it our selfs for local use, in other word the will create a certificate not a request, so we will skip the authority signature part. passing req without -x509 will create a request not a certificate. The -noenc tells openssl not to ask for a password to encrypt this key which is not recommended in a real scenario.
+$ openssl or openssl help: this will give us the different commands that we can use.
+$ openssl req -newkey rsa:2048 -keyout key.pem -out req.pem: generate private key and a certificate signing request (CSR). This will generate two files: req.pem and key.pem, then we can send these to a certificate authority, the key type will be rsa with 2048 bits.
+$ openssl req -x509 -noenc -newkey rsa:4069 -days 365 -keyout key.pem myprivate.key -out mycertificate.crt: here we can do the same thing but with signing it our selfs for local use, in other words this will create a certificate not a request, so we will skip the authority signature part. passing req without -x509 will create a request not a certificate. The -noenc tells openssl not to ask for a password to encrypt this key which is not recommended in a real scenario.
 $ openssl x509  -in mycertificate.crt -text: decode and print the certificate in a text form.
-
-passphrase: $;lahi%ohasfdk

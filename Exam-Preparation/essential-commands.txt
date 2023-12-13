@@ -206,7 +206,7 @@ $ rsync -a <directory1>/ <directory2>/
 
 * It's possible to backup entire disk or partition which take picture of all the data on the disk or partition in exact bit by bit copy, which is known as "imaging". this can be done using $dd command.
 
-* Before backing up or taking image of a disk or partition, make sure to unmount that disk or partition so not data isn't being changed while this disk or partition is backing up.
+* Before backing up or taking image of a disk or partition, make sure to unmount that disk or partition so no data is being changed while this disk or partition is backing up.
 
 $ sudo dd if=<disk to backup> of=<output file> bs=<block size e.g. 1M> status=progress:
 - if: input file
@@ -214,7 +214,7 @@ $ sudo dd if=<disk to backup> of=<output file> bs=<block size e.g. 1M> status=pr
 - bs: block size, set this to speed up the process.
 - status: set to progress to tell dd to show the progress it's making.
 
-* Reverse the if and of labels to store a backup to a disk:
+* Reverse the if and of labels paths to store a backup to a disk:
 $ sudo dd if=<diskimage.raw> of=<disk to backup in>  bs=<block size e.g. 1M> status=progress:
 
 Note running this command on a virtual machine will overwrite your virtual disk.
@@ -223,7 +223,7 @@ __________________________________________________________________
 
 Use Input-Output Redirection
 
-* We call the > redirection, because programs has a default location where they will send the out put to, which is normally the terminal windows and that is to our screen, so we redirect the output location to somewhere else, that's why we call it redirection.
+* We call the > redirection, because programs has a default location where they will send the output to, which is normally the terminal windows and that is to our screen, so we redirect the output location to somewhere else, that's why we call it redirection.
 
 < : STDIN, one use case is to pass file to a utility e.g. $ cat < hello.txt
 1> or >: STDOUT
@@ -232,9 +232,9 @@ Use Input-Output Redirection
 Example of using STDOUT and STDERR: $ grep -r '^The' /etc/ 1>>output.txt 2>>error.txt
 
 * To direct both STDOUT and STDERR to one file, use the command this way:
-$ grep -r '^The' /etc/ 1>>output.txt 2>&1, 2>&1 means redirect STDERR to STDOUT.
+$ grep -r '^The' /etc/ 1>>output.txt 2>&1, 2>&1 means redirect STDERR to STDOUT. The and symbol (& works as redirection between STDERR and STDOUT)
 
-* Another use of STDIN redirection (<), is Here document, where you specify when to end input by, for example:
+* Another use of STDIN redirection (<), is Here document, where you specify when to end input, for example:
 $ sort <<EOF: now sort will prompt for input and once "EOF" is entered the prompt will end. Note, any text can be used instead of EOF (End Of File), but EOF is commonly used.
 $ bc <<<1+2+3+4, this allows passing text to the program instead of open the command prompt for keyboard input.
 
