@@ -98,3 +98,31 @@ $ systemd-cat: connect a pipeline or a program with journal, in other words writ
 $ man systemd.service: show man page for unit files. look for EXAMPLES. type $ man systemd. , and double tap to see the other options apart from service.
 $ sudo systemctl daemon-reload: reload systemd daemon, which is required whenever a service unit is added, removed, or edited.
 $ journalctl -f: print system logs, -f flag runs the command with follow mode (watch).
+
+
+_______________________________________
+
+Diagnosis and Manage processes
+
+
+* It's possible to inspect processes using the $ps command, this command has two flag syntaxes, if run with dashes as -a this is the unix style syntax, and without dashes is BSD style syntax and each has different effects. With this command we will get process information such which user the process was ran under and the PID, CPU, and other information.
+
+* Some processes might be but on sleep state that is why they appear in the $ps command but with current zero CPU usage. The MEM column represent how how much CPU time was used by the process, 1 means the process used 100% of one cpu core for one second, and other calculations are made accordingly.
+
+* Processes with command rapped in brackets belongs to the kernel, they are not running in user space, so usually, we would not interact with them.
+
+* In linux there is a concept that describes the process priority, the concept is called product niceness. It's how nice a process to other processes, higher number means the process is nicer to other processes. the niceness can be a number from -20 to +19. Furthermore, a lower number means the process has higher priority. Use the $nice command in the launching of a process. a process with number of -20 will leave the spare CPU for a process with a nice number of +19. Note that to assign a lower nice value to higher priority we have to use root privilege, since only root user can set the NI of a process to negative value.
+
+stopped at minute 17.
+
+commands:
+$ ps: report a snapshot of the current processes. By default ps is going to show us the processes running in our current window or session. Some ps flags explained below. $ ps aux, is the most used command to view all processes in linux. Search for EXAMPLES in the man pages to see some flag combinations and their usage in both UNIX and BSD style syntaxes. The "u" flag is for user oriented format.
+$ top: display Linux processes, show us processes in watch mode. Top will show the most CPU intensive processes at the top. Also it gives general information at the top.
+$ ps <PID>: get information for a specific process.
+$ ps -U <username>: print all processes that belongs to certain user.
+$ pgrep -a <process name e.g. syslog>: search process by name.
+$ nice -n <niceness number e.g. 11> <process e.g. bash: run a program with modified scheduling priority.
+$ ps -l: print processes with more information, including the nice value (Look at the NI column). Use $ ps lax to see all the processes and their nice numbers, not only by the current user.
+$ ps fax: shows the tree relationship between processes (which process was run by another), think of f as forest.
+
+
