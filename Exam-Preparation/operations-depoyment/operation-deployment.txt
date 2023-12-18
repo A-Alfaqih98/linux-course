@@ -1,0 +1,100 @@
+Reboot and Shutdown
+
+* systemctl stands for "system control".
+
+commands:
+$ systemctl reboot: reboot the system, use --force if system refuse to reboot because of non responding program or another reason that is preventing the normal reboot, use this only as a last resort since it won't give the running programs to close properly or save their data. Also you can use double --force e.g. --force --force which will act as a reset button click.
+
+$ systemctl poweroff: shutdown the system, --force can be used here as well, use this only as a last resort. Using double force here will work as unplugging the computer from its power source.
+
+$ shutdown <scheduled time e.g. 02:00>: schedule a time that the system will shutdown at. And, to reboot add the -r flag. A wall message can be passed to the users so they know when the system is going to shutdown or reboot and why, to do that, pass a single quote argument at the end of the commands, e.g. sudo shutdown -r +1 'Scheduled a reset after 1 minute'
+
+_______________________________________
+
+Boot or Change the system to different operating modes
+
+* Some targets information:
+1- emergency.target: load up as few programs as possible, this target could be useful for debugging when other targets are loading programs that is making your system unstable. The root file system will be mounted as read only in this target.
+
+2- rescue.target: load few more programs than emergency.target, this target is useful to backup data basis and fix system settings and so on, in this target you will be dropped into a root shell where you can type commands. Note, you need to have a password set to root user to get into these two targets running since you are going to login as root user.
+
+commands:
+$ systemctl isolate <boot target e.g graphical.target>: switch to a operating target without the need to reboot after using $ systemctl set-default command.
+
+_______________________________________
+
+Install, Configure, and Troubleshoot the Linux Bootloaders
+
+* Bootloader is one of the first programs that starts in a linux system, one purpose of it, is to start the linux kernel. GRUB (Grand Modified Bootloader), is the most popular linux bootloader.
+
+* BIOS (basic input/output system) is the program a computer's microprocessor uses to start the computer system after it is powered on. In other words, the console you get when you install linux. When a computer boots through a BIOS, the computer looks for the bootloader at the very begging of the disk, that means we need to place GRUB bootloader in the first few sectors of that disk.
+
+* First thing when we are in troubleshoot mode via a boot stick, is to know which disk we should install GRUB into, using the $lsblk command. In $lsblk, block devices starting with sd are physical and devices starting with vd are virtual. Computers that use efi does not look for bootloaders on the first sector of the disk, rather they look for it in a file stored in a boot partition.
+
+* To make changes or settings of grub, you can edit the configuration file /etc/default/grub. For example you can edit the GRUB_TIMEOUT, to control how much time GRUB console menu should show up before computer starts.  Once edited we have to regenerate GRUB configuration file using $ grub2-mkconfig -o /boot/grub2/grub.cfg, or for efi mode $grub2-mkconf ig -o /boot/efi/EFI/centos/grub.cfg.
+
+commands:
+$ chroot <another file system root e.g /mnt/sysroot>: run command or interactive shell with special root directory.
+$ sudo grub2-install /dev/vda > /home/bob/grub.txt 2>&1: install grub bootloader to /dev/vda disk.
+
+
+_______________________________________
+
+Using Scripting to Automate System Maintenance Tasks
+
+
+* Adding sh to the end of script file is not mandatory, though it is best practice, sometimes we need to not add sh when we want another program to run that script such as cron.
+
+
+
+commands:
+$ help: get bash built-ins directives. Or, use $ help <directive>, e.g $ help if, to get how to use that directive.
+$ test: bash built-in to evaluate expressions and can be used in if statement, it can run file conditions. To see how to use it, run $ man test, or help test.
+
+
+_______________________________________
+
+Manage the Startup Process and Services
+
+* init system has the instructions of what services to start, when to start them and what service it depends on, are all defined in "Units", Units are text files the describes the logic. There are four types of Units:
+1- Service
+2- Socket
+3- Device
+4- Timer
+
+* If a service is "enabled" that means that the service will automatically starts up when the system boots, and "disabled" means that the service can be manually started by the administrator.
+
+* When running the $ systemctl status <service name> command, if the status is "active (running)" that mean the program is launched and loaded into memory and it is active and running. When a service is running it will have a Process Identifier (PID), since every time we start a service or launch a program a process (computer code loaded into memory, and using the cpu when it needs to execute instructions) will start up. Also, we can see the exact command that has been used to start up the process. And finally, system status command will show us few log lines generated by this application , these lines can be useful to see what happened after this program started up.
+
+commands:
+$ man systemd.service: see the options that you can add to a service unit.
+$ systemctl cat <service name e.g. sshd.service>: print the unit file for a service.
+$ systemctl revert <service name e.g. sshd.service>: revert a service (uint files) to its factory configuration.
+$ systemctl status <service name e.g. sshd.service>: print a service status.
+$ systemctl stop <service name e.g. sshd.service>: stop a service the specified service unit controls.
+$ systemctl start <service name e.g. sshd.service>: start a service the specified service unit controls.
+$ systemctl restart <service name e.g. sshd.service>: restart a service the specified service unit controls, though this command could be disruptive if certain users are using the service. use $reload command instead.
+$ systemctl reload <service name e.g. sshd.service>: reload a service the specified service unit controls. This command will reload the service setting instead of restarting it.
+$ systemctl reload-or-restart <service name e.g. sshd.service>: not all services can be reloaded, thus use this command where systemctl will try to reload first then restart if the reload fails.
+$ systemctl disable <service name e.g. sshd.service>: disable a service the the specified service unit controls to start at boot. Use --now flag to start the service as well.
+$ systemctl enable <service name e.g. sshd.service>: enable a service the the specified service unit controls to start at boot. Use --now flag to start the service as well.
+$ systemctl is-enable <service name e.g. sshd.service>: check if a service is enabled.
+$ systemctl mask <service name e.g. sshd.service>: prevent other services from starting up certain service as well as disabling the service and not allowing it to start even manually.
+$ systemctl unmask <service name e.g. sshd.service>: unmask a service.
+$ systemctl list-units --type service --all: list all units of type service.
+
+_______________________________________
+
+Create Systemd Services
+
+* For service units examples, got to /lib/systemd/system/.
+
+* Your services should be places at /etc/systemd/system/<myapp.service>.
+
+* A daemon is also called background processes, e.g. sshd stands for "ssh daemon"
+
+commands:
+$ systemd-cat: connect a pipeline or a program with journal, in other words write logs to journalctl logs.
+$ man systemd.service: show man page for unit files. look for EXAMPLES. type $ man systemd. , and double tap to see the other options apart from service.
+$ sudo systemctl daemon-reload: reload systemd daemon, which is required whenever a service unit is added, removed, or edited.
+$ journalctl -f: print system logs, -f flag runs the command with follow mode (watch).
