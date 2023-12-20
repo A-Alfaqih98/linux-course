@@ -87,7 +87,7 @@ _______________________________________
 
 Create Systemd Services
 
-* For service units examples, got to /lib/systemd/system/.
+* For service units examples, go to /lib/systemd/system/.
 
 * Your services should be places at /etc/systemd/system/<myapp.service>.
 
@@ -105,24 +105,78 @@ _______________________________________
 Diagnosis and Manage processes
 
 
-* It's possible to inspect processes using the $ps command, this command has two flag syntaxes, if run with dashes as -a this is the unix style syntax, and without dashes is BSD style syntax and each has different effects. With this command we will get process information such which user the process was ran under and the PID, CPU, and other information.
+* It's possible to inspect processes using the $ps command, this command has two flag syntaxes, if run with dashes as -a this is the unix style syntax, and without dashes is BSD style syntax and each has different effects. With "aux" flag we will get process information such which user the process was ran under and the PID, CPU, and other information.
 
-* Some processes might be but on sleep state that is why they appear in the $ps command but with current zero CPU usage. The MEM column represent how how much CPU time was used by the process, 1 means the process used 100% of one cpu core for one second, and other calculations are made accordingly.
+* Some processes might be on sleep, state that is why they appear in the $ps command result but with current zero CPU usage. The MEM column represent how how much CPU time was used by the process, 1 means the process used 100% of one cpu core for one second, and other calculations are made accordingly.
 
-* Processes with command rapped in brackets belongs to the kernel, they are not running in user space, so usually, we would not interact with them.
+* Processes with command rapped in brackets belongs to the kernel, they are not running in user space, so usually we would not interact with them.
 
-* In linux there is a concept that describes the process priority, the concept is called product niceness. It's how nice a process to other processes, higher number means the process is nicer to other processes. the niceness can be a number from -20 to +19. Furthermore, a lower number means the process has higher priority. Use the $nice command in the launching of a process. a process with number of -20 will leave the spare CPU for a process with a nice number of +19. Note that to assign a lower nice value to higher priority we have to use root privilege, since only root user can set the NI of a process to negative value.
+* In linux there is a concept that describes the process priority, the concept is called product niceness. It's how nice a process is to other processes, higher number means the process is nicer to other processes. the niceness can be a number from -20 to +19. Furthermore, a lower number means the process has higher priority. Use the $nice command in the launching of a process. a process with number of -20 will leave the spare CPU for a process with a nice number of +19. Note that to assign a lower nice value for higher priority, we have to use root privilege, since only root user can set the NI of a process to negative value.
 
-stopped at minute 17.
+* Signals tells programs to do something that they are programmed to do, the only signals that can be used without the processes been programmed to respond to, is the stop and kill signals.
+
+* Processes can run on the background (not visible in the terminal) and on the foreground (visible on terminal). For example, pressing "ctrl + z" in vim stops and pushes vim to the background and typing the command $fg start it and bring it back to the foreground.
+
+* It's possible to background a command when typing it by using the and percent symbol (&) after it, e.g. $ sleep 10 &. When using this, it will give us a job number that we can use to get the process back to the foreground using the $ fg <job number> command.
+
 
 commands:
-$ ps: report a snapshot of the current processes. By default ps is going to show us the processes running in our current window or session. Some ps flags explained below. $ ps aux, is the most used command to view all processes in linux. Search for EXAMPLES in the man pages to see some flag combinations and their usage in both UNIX and BSD style syntaxes. The "u" flag is for user oriented format.
+$ ps: report a snapshot of the current processes. By default ps is going to show us the processes running in our current window or session. Some ps flags explained below. $ ps aux (auxiliary), is the most used command to view all processes in linux. Search for EXAMPLES in the man pages to see some flag combinations and their usage in both UNIX and BSD style syntaxes. The "u" flag is for user oriented format.
 $ top: display Linux processes, show us processes in watch mode. Top will show the most CPU intensive processes at the top. Also it gives general information at the top.
 $ ps <PID>: get information for a specific process.
+$ ps u <PID>: get information for a specific process with user oriented flag.
 $ ps -U <username>: print all processes that belongs to certain user.
 $ pgrep -a <process name e.g. syslog>: search process by name.
 $ nice -n <niceness number e.g. 11> <process e.g. bash: run a program with modified scheduling priority.
 $ ps -l: print processes with more information, including the nice value (Look at the NI column). Use $ ps lax to see all the processes and their nice numbers, not only by the current user.
-$ ps fax: shows the tree relationship between processes (which process was run by another), think of f as forest.
+$ ps fax: shows the tree relationship between processes (which process was started by another), think of f as forest.
+$ renice <nice value> <PID>: alter priority of running processes, change the nice value of a running process.
+$ kill -L: kill sends a signal to a process or service's process, using the -L flags list all the signals that can be sent to a process.
+$ kill <signal name or number e.g. -SIGKILL or -KILL or -9>: send signal to a process via PID.
+$ kill <PID>: tells a program to gracefully shut down by give it time to save its work and close down normally.
+$ pkill <signal> <process name>: send signals to processes using their names rather their PIDs.
+$ fg <job number>: foreground a program (bring it to the terminal), if typed without a job number it will foreground job number 1.
+$ jobs: see the current jobs.
+$ bg: run the process that was stopped in the background, as for example if we stopped and background the sleep command using "ctrl + z".
+$ lsof -p <PID>: list open files that are opened by certain process.
+$ lsof <file or directory path>: list processes that are using this file or directory, the opposite of the previous command.
+
+_______________________________________
+
+Locate and Analyze System Log Files
+
+* Linux Systems are largely server oriented, and every thing that happens in a Linux system are saved as text somewhere, which is called logs.
+
+* Most popular logging daemon is rsyslog (rocket-fast system for log processing), rsyslog stores logs in /var/log/ directory and can be searched using $grep command or any text utility. You might want to login as root user since most of these files can not be read by regular users.
+
+* Most logs are written in the following order: Date User-Host Source(application) Log-Message.
+
+* Some log files have numbers on them, these numbers represent the date of the logs, are they old or recent logs. Older logs will be renamed.
+
+* journalctl is a smart tool to search logs.
+
+* There are four types of logs:
+1- info
+2- warning
+3- err
+4- crit (critically wrong)
+type journalctl -p (--priority flag) then double tab to see journalctl log types that you can search for independently.
+
+commands:
+$ tail -F <log file e.g. /var/log/source>: see logs in follow mode (watch).
+$ journalctl <command path e.g. /bin/sudo>: see the logs generated by certain command, in this case we are checking logs generated by the $sudo command, the path can be obtained using $which command. Note, this command show the logs in the less utility, use ">" to go to the end of the logs, or use the -e flag with the command.
+$ journalctl -u <service name>: display logs generated by a service unit.
+$ journalctl -f: access journalctl log in follow mode. Use -g to search with regular expression.
+$ journalctl -S <24h format or date> -U <24hour format or date>: search with starting date and until date.
+$ journalctl -b 0: see logs from current boot, use -1 to see logs from previous boot and so on.
+$ last: show a list of last logged in users. The line with system boot shows when the system was powered on.
+$ lastlog: shows when each user on the system logged in last time, and if they logged in through ssh, you can see the ip address from which they logged in.
 
 
+_______________________________________
+
+Schedule Tasks to Run at a Set Time
+
+* There are three ways to schedule tasks in linux
+
+* anacron utility is similar to cron utility, but the smallest frequency it can be scheduled to run at is days unlike cron where you can use minutes. Another difference is that anacron utility if the computer was powered on after the scheduled time of a task it will still run it, unlike cron where the task will be missed.
