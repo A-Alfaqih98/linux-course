@@ -177,6 +177,60 @@ _______________________________________
 
 Schedule Tasks to Run at a Set Time
 
-* There are three ways to schedule tasks in linux
+* There are three ways to schedule tasks in linux:
+1- cron (at /etc/crontab)
+2- anacron (at /etc/anacrontab)
+3- at
 
-* anacron utility is similar to cron utility, but the smallest frequency it can be scheduled to run at is days unlike cron where you can use minutes. Another difference is that anacron utility if the computer was powered on after the scheduled time of a task it will still run it, unlike cron where the task will be missed.
+* anacron utility is similar to cron utility, but the smallest frequency it can be scheduled to run at is days (we don't care at which time of the day it runs at) unlike cron where you can use minutes. Another difference is that anacron utility if the computer was powered on after the scheduled time of a task it will still execute it once the computer is powered on, unlike cron where the task will be missed.
+
+* The $at command run a command only once at a specified time.
+
+* Look at /etc/crontab file to  get a syntax reminder of how to add a cron by looking at the  default system-wide cron table. Note that jobs should not be added directly to the system-wide cron table, rather they should be added to user personal cron table.
+
+* In the time columns, asterisk (*) means match every field, comma (,) with no spaces can be used to specify multiple values for certain columns, dash (-) can be used to specify range, and slash (/) can be used as a step. Also, multiple symbols can be combined e.g 0-8/4 in the hours column means run at 0am, 4am, and 8am.
+
+* In crontab, use the full path of the command.
+
+* Edit user crontab with $crontab -e command.
+
+* Shell scripts should have no extensions if we want to run them as cron jobs.
+
+* Another way of setting cron tasks is to add scripts to the frequency specific directory, e.g. $ sudo cp shellscript /etc/cron.hourly/ and give it the correct permissions (+rx). There are four directories for that purpose:
+1- /etc/cron.hourly/
+2- /etc/cron.daily/
+3- /etc/cron.weekly/
+4 - /etc/cron.monthly/
+
+* anacron example:
+3   10 <job name> <command (use full path of a command)>
+This means job run every three days, and add a delay of ten minutes when job are been missed so that if there are more than one job, they don't all run at the same time. And, the job name is useful for logging.
+
+* Add @weekly and @monthly in the days column to run the command weekly or monthly.
+
+
+
+commands:
+$ crontab -l: list the crontab jobs of current user. Add sudo in front to edit the crontab of root user.
+$ sudo crontab -e -u <another user>: run a cron tab command e.g. edit, list, and so on, as another user. or just log in as that user.
+$ crontab -r: remove user crontab.
+$ anacron -T: verify the syntax of the anacron job using the Test flag (-T).
+$ at <Time or date, e.g. 15:00 or 'August 20 2024' or '2:30 August 20 2024'>: add a cron job using the at command, after entering the command a prompt will be open to add commands at and it can be saved and exited using "ctrl+d".
+$ sudo anacron -n: run all anacron jobs now (-n), works only for jobs that have not ran today.
+$ sudo anacron -n -f: force all anacron jobs to run now, regardless weather of the last time they been executed.
+$ at <relative time e.g. 'now + 3 hours' or 'now + 3 minutes'>: set jobs using relative time, so for the first example run the job after 3 hours. Same can be done with weeks, days, or months.
+$ atq: list what jobs are scheduled to run with the $at utility, along their job ids.
+$ at -c <job id>: display what an $at job contains (-c), get the job id from the $atq command.
+$ atrm <job id>: remove $at job using the job id.
+
+_______________________________________
+
+Verify Completion of Scheduled Jobs
+
+* depending on the machine and distribution cron logs can be found in different files /var/log/cron or in my case /var/log/syslog. 
+
+* In /etc/crontab and /etc/anacrontab there are MAILTO field that can be set to send logs, to some user mail or a set mail
+
+* The $at utility daemon is atd, so that's what you want to look for when searching $at job logs.
+
+command:
