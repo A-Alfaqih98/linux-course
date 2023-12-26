@@ -177,18 +177,23 @@ _______________________________________
 
 Schedule Tasks to Run at a Set Time
 
-* There are three ways to schedule tasks in linux:
+* There are three utilities to schedule tasks in linux:
 1- cron (at /etc/crontab)
 2- anacron (at /etc/anacrontab)
 3- at
 
-* anacron utility is similar to cron utility, but the smallest frequency it can be scheduled to run at is days (we don't care at which time of the day it runs at) unlike cron where you can use minutes. Another difference is that anacron utility if the computer was powered on after the scheduled time of a task it will still execute it once the computer is powered on, unlike cron where the task will be missed.
+* anacron utility is similar to cron utility, but the smallest frequency it can be scheduled to run at is days (we don't care at which time of the day it runs at) unlike cron where we can use minutes. Another difference is that anacron utility if the computer was powered on after the scheduled time of a task it will still execute it once the computer is powered on, unlike cron where the task will be missed.
 
-* The $at command run a command only once at a specified time.
+* The $at command run a command only once at a specified time or date.
 
 * Look at /etc/crontab file to  get a syntax reminder of how to add a cron by looking at the  default system-wide cron table. Note that jobs should not be added directly to the system-wide cron table, rather they should be added to user personal cron table.
 
-* In the time columns, asterisk (*) means match every field, comma (,) with no spaces can be used to specify multiple values for certain columns, dash (-) can be used to specify range, and slash (/) can be used as a step. Also, multiple symbols can be combined e.g 0-8/4 in the hours column means run at 0am, 4am, and 8am.
+* In the time columns:
+1- Asterisk (*) means match every field
+2- Comma (,) with no spaces can be used to specify multiple values for certain columns
+3- Dash (-) can be used to specify range
+4- Slash (/) can be used as a step.
+Also, multiple symbols can be combined e.g 0-8/4 in the hours column means run at 0am, 4am, and 8am.
 
 * In crontab, use the full path of the command.
 
@@ -200,10 +205,10 @@ Schedule Tasks to Run at a Set Time
 1- /etc/cron.hourly/
 2- /etc/cron.daily/
 3- /etc/cron.weekly/
-4 - /etc/cron.monthly/
+4- /etc/cron.monthly/
 
 * anacron example:
-3   10 <job name> <command (use full path of a command)>
+3   10  <job name>  <command (use full path of a command)>
 This means job run every three days, and add a delay of ten minutes when job are been missed so that if there are more than one job, they don't all run at the same time. And, the job name is useful for logging.
 
 * Add @weekly and @monthly in the days column to run the command weekly or monthly.
@@ -211,15 +216,15 @@ This means job run every three days, and add a delay of ten minutes when job are
 
 
 commands:
-$ crontab -l: list the crontab jobs of current user. Add sudo in front to edit the crontab of root user.
-$ sudo crontab -e -u <another user>: run a cron tab command e.g. edit, list, and so on, as another user. or just log in as that user.
+$ crontab -l: list the crontab jobs of current user. Add sudo in front to list crontab jobs of the root user.
+$ sudo crontab -e -u <another user>: run a cron tab command e.g. edit, list, and so on, as another user. or just login as that user.
 $ crontab -r: remove user crontab.
 $ anacron -T: verify the syntax of the anacron job using the Test flag (-T).
-$ at <Time or date, e.g. 15:00 or 'August 20 2024' or '2:30 August 20 2024'>: add a cron job using the at command, after entering the command a prompt will be open to add commands at and it can be saved and exited using "ctrl+d".
 $ sudo anacron -n: run all anacron jobs now (-n), works only for jobs that have not ran today.
 $ sudo anacron -n -f: force all anacron jobs to run now, regardless weather of the last time they been executed.
-$ at <relative time e.g. 'now + 3 hours' or 'now + 3 minutes'>: set jobs using relative time, so for the first example run the job after 3 hours. Same can be done with weeks, days, or months.
-$ atq: list what jobs are scheduled to run with the $at utility, along their job ids.
+$ at <Time or date, e.g. 15:00 or 'August 20 2024' or '2:30 August 20 2024'>: add a cron job using the at command, after entering the command, a prompt will be opened to add commands and it can be saved and exited using "ctrl+d".
+$ at <relative time e.g. 'now + 3 hours' or 'now + 3 minutes'>: set jobs using relative time. So, for the first example run the job after 3 hours. Same can be done with weeks, days, or months.
+$ atq: list what jobs are scheduled to run with the $at utility, along with their job ids.
 $ at -c <job id>: display what an $at job contains (-c), get the job id from the $atq command.
 $ atrm <job id>: remove $at job using the job id.
 
@@ -227,10 +232,92 @@ _______________________________________
 
 Verify Completion of Scheduled Jobs
 
-* depending on the machine and distribution cron logs can be found in different files /var/log/cron or in my case /var/log/syslog. 
+* depending on the machine and distribution cron logs can be found in different files, /var/log/cron or in my case /var/log/syslog. 
 
-* In /etc/crontab and /etc/anacrontab there are MAILTO field that can be set to send logs, to some user mail or a set mail
+* In /etc/crontab and /etc/anacrontab there are MAILTO fields that can be set to send logs, to some user mail or a set mail
 
 * The $at utility daemon is atd, so that's what you want to look for when searching $at job logs.
 
-command:
+_______________________________________
+
+Manage the software with the Package Manager
+
+* apt is an abbreviation for Advanced Package Tool, apt works in Ubuntu and debian distributions.
+
+* First command to run in apt is $ sudo apt update, to update the package manager local database. The updated information will come from the remote repository.
+
+* Before installing a package, It's recommended to update apt so you don't end up installing an older version of the package you want to install.
+
+commands:
+$ sudo apt update: update the local apt database.
+$ sudo apt upgrade: upgrade our installed packages. These two commands can be chained using double and symbol (&&).
+$ dpkg --listfiles <package name>: list files included in a package using lower package manager tool dpkg.
+$ dpkg --search <file name>: see what package uses the given file.
+$ apt show <package>: show package details including a description of it.
+$ apt search <searching word e.g. nginx>: look all packages that mention the given word within all of its details, in this example "nginx. Multiple words can be passed as arguments, which says find the package that include all these words.
+$ apt search --names-only <searching word e.g. nginx>: search packages with the given word in its name, in this example search for a package with a name the includes "nginx".
+$ sudo apt remove <package name>: remove a package. Note, this command will only remove the main package and will not remove the dependencies with it, thus we can use the $ apt autoremove command afterward.
+$ sudo apt autoremove: remove the leftover dependencies of removed packages.
+$ sudo apt autoremove <package name>: remove a package alongside its own dependencies.
+
+_______________________________________
+
+Configure the Repositories of the package Manager
+
+* See the default repositories configured in the system by looking at /etc/apt/sources.list. If we look at one of the lines that point to a repositories like this: deb http://sa.archive.ubuntu.com/ubuntu/ jammy-updates main restricted, the "deb" means that this line points to a repository with .deb files, which are packages. and the link is the repository address, and "jammy-updates" is the code name for this Ubuntu distribution. After distribution code name, we can have one of these key words main, universe, multiverse, and restricted these key names are for repository components or a segment in the repository. For example, main points to the packages supported and maintained by Ubuntu and so on.
+
+* Sometimes we need to install third party software that is not maintained by Ubuntu, first we need to download the public key which is signed by the package private key, the public key will allow the package manager to identify the signature and verify that the package was not modified by a malicious users, example of downloading the public key is:
+curl <link to package public key> -o <package-name.key>. Next we use the gpg command to transform the key from a text format to a binary format that our package manager can understand e.g. $ gpg --dearmor docker.key.
+
+Next we will move the key with gpg format to the /etc/apt/keyrings/ where third party apt packages public keys exist e.g. $ sudo mv docker.key.gpg /etc/apt/keyrings/. Finally, add the package details to the apt configuration, specifically to the /etc/apt/sources.list.d/ where each third party package will have its own config file e.g sudo vi /etc/apt/sources.list.d/docker.list, then add deb [signed-by=/etc/apt/keyrings/docker.key.gpg] https://download.docker.com/linux/ubuntu jammy stable, and update apt database. 
+
+* ppa stands for Personal Package Archive, these simplify the process of installing a third party repositories.
+
+commands:
+$ sudo add-apt-repository ppa:<username>/<repository name>: add third party personal repository for example: $ sudo add-apt-repository ppa: graphics-driver/ppa.
+$ add-apt-repository --list: list all ppa repositories in our system.
+$ add-apt-repository --remove: remove a ppa.
+
+
+_______________________________________
+
+Install Software by Compiling Source Code
+
+* Sometimes we might need to clone the source code of a software from github and compile it to executable code  to get the latest version.
+
+* The cloned repository could have a README file within it which may contain the instructions of how to compile and run the software.
+
+
+commands:
+$ sudo apt install libncursesw5-dev autotools-dev autoconf automake build-essential: some packages that might be needed for compilation and running packages.
+
+_______________________________________
+
+Verify the Integrity and Availability of Resources
+
+* When printing the file system disk free spaces using the $ df -h, we can see disks with the name of tmpfs those are virtual file systems that only exist in the computers memory not on the storage devices.
+
+commands
+$ du -sh: print disk usage is a summary and human readable format.
+$ uptime: see how heavily the cpu cores are used by programs running on the server. We can see the important information in the three numbers after load average, first is load average in the last minute, second number is for the las five minute, and the last is for the last fifteen minutes. 1.0 as the first number means one cpu core has been used at the full capacity for the last one minute.
+$ lscpu: see details about cpu used in the system.
+$ lspci: see details about other hardware in the system.
+$ sudo xfs_repair -v <partition where a file system is stored e.g. /dev/vdb1>: verify an xfs file system. -v for verbose.
+$ sudo fsck.ext4 -v -f -p <partition where a file system is stored e.g. /dev/vdb1>: check and repair ext4 file system. -f forces the check, and -p will fix minor problems automatically without asking us.
+$ systemctl list-dependencies: check that key processes and important programs are working fine in our system. White means the service is stopped and that's for process that does not meant to be running all the time, green light is for currently running services.
+
+_______________________________________
+
+Change Kernel Runtime Parameters, Persistent and Non-Persistent
+
+commands:
+$ sudo sysctl -a: print kernel runtime parameters, a value of zero means not activated (false).
+$ sudo sysctl -w <parameter=value e.g. net.ipv6.conf.default.disable_ipv6=1>: write (-w) a value to the parameter. Note, this change isn't persistent, it will go after reboot.
+$ sudo sysctl <parameter e.g. vm.swappiness>: get the value of a parameter.
+
+
+
+
+  
+
+
