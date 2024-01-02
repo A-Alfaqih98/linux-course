@@ -310,14 +310,60 @@ _______________________________________
 
 Change Kernel Runtime Parameters, Persistent and Non-Persistent
 
+* To make a change to a file persistent, add a file to the /etc/sysctl.d/<filename.conf>, then add the parameter along its new value to that file. e.g. /etc/sysctl.d/swap-less.conf includes vm.swappiness=29. This way the value will change starting from the next boot on, use the $ sudo sysctl -p <parameter file e.g. /etc/system.d/swappiness.conf> to apply the changes in that conf file now.
+
+* vm.swappiness parameter determine what the system should done when it runs out of memory, its value can vary from 0 to 100. A higher value means the system will use the disk as virtual memory as early as the memory starts to gets full. While a lower value tells the system to try to use the memory to its best before making a virtual memory from the disk.
+
 commands:
 $ sudo sysctl -a: print kernel runtime parameters, a value of zero means not activated (false).
 $ sudo sysctl -w <parameter=value e.g. net.ipv6.conf.default.disable_ipv6=1>: write (-w) a value to the parameter. Note, this change isn't persistent, it will go after reboot.
 $ sudo sysctl <parameter e.g. vm.swappiness>: get the value of a parameter.
+$ man sysctl.d: get the man page of /etc/system.d/ directory.
+$ sudo sysctl -p <parameter file e.g. /etc/system.d/swappiness.conf>
+
+_______________________________________
+
+List and Identify SELinux/AppArmor File and Process Contexts
 
 
+* Linux has some modules that the system can be extended with to add security, one of these is called SELinux which enable advanced capabilities of restricting access. SELinux is enabled by default in CentOS stream.
+
+* To the the advanced access rights applied by SELinux use the $ ls -Z command/flag, a result like this will be shown if SELinux is defined for a file: unconfined_u:object_r:user_home_t:s0. The order of the result is: user:role:type:level.
+
+* The user in SELinux is not the normal Linux user, rather each user in the system maps to SELinux user. Each user has certain roles assign to it, for example one user can only interact with docker container and nothing else. As well as that users are granter an access Level, where each level can access certain files only, higher access levels can access the lower ones.
+
+* Type or domain contains strict set of policies that defines what a process is allowed to do. Moreover, only files that has the correct domain can enter that process domain. Unconfined_t means that the process is unrestricted. 
+
+* SELinux features:
+1- Only certain users can enter certain roles and certain types.
+2- It lets authorized users and processes do their job, by granting the permissions they need.
+3- Authorized users and processes are allowed to take only a limited set of actions.
+4- Everything else is denied.
+
+commands:
+$ ls -Z: show the SELinux access rights.
+$ ps axZ: show processes along with their SELinux restricted domain (type).
+$ id -Z: see the security context applied to our current user.
+$ sudo semanage login -l: see how the SELinux mapping is done.
+$ sudo semanage user -l: see the role each user has in the system.
+$ getenforce: see if SELinux is enabled.
+$ setenforce <status e.g. Permissive>: change the status of SELinux.
+$ sudo chcon -t httpd_sys_content_t /var/index.html: changer the context of SELinux from /var/index.html to httpd_sys_content_t 
 
 
-  
+_______________________________________
+
+Create and Enforce MAC Using SELinux
+
+* Redhat and CentOS have SELinux enabled by default, Ubuntu on the other hand has another has a different security module called AppArmor which is enabled by default. Therefor if we wanted to enable SELinux in Ubuntu we need to stop and disable apparmor.service if active before enabling SELinux.
+
+* Every file should be labeled in the system for SELinux to work, check that by running $ ls -Z / command, if not labeled, question mark will appear next to each file. When selinux is activated through $ selinux-activate command, we will find /.autorelabel file which will automatically relabel all files at boot with the proper security labels.
+
+
+commands:
+$ sudo apt install selinux-basics auditd: install SELinux in Ubuntu which does not has SELinux. auditd will help in building more SELinux features in our system and logging to the system. Configuration file will be created at /etc/selinux/config.
+$ sestatus: check SELinux service status.
+$ sudo selinux-activate: modify the GRUB bootloader, SELinux module will be loaded on boot, to see the change look at /etc/default/grub.
+
 
 
