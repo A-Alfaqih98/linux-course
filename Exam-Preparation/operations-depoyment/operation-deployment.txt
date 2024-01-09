@@ -348,7 +348,7 @@ $ sudo semanage login -l: see how the SELinux mapping is done.
 $ sudo semanage user -l: see the role each user has in the system.
 $ getenforce: see if SELinux is enabled.
 $ setenforce <status e.g. Permissive>: change the status of SELinux.
-$ sudo chcon -t httpd_sys_content_t /var/index.html: changer the context of SELinux from /var/index.html to httpd_sys_content_t 
+$ sudo chcon -t httpd_sys_content_t /var/index.html: change the context of SELinux type from /var/index.html to httpd_sys_content_t. -t is for type, -u is for user, and -r is for role.
 
 
 _______________________________________
@@ -359,11 +359,35 @@ Create and Enforce MAC Using SELinux
 
 * Every file should be labeled in the system for SELinux to work, check that by running $ ls -Z / command, if not labeled, question mark will appear next to each file. When selinux is activated through $ selinux-activate command, we will find /.autorelabel file which will automatically relabel all files at boot with the proper security labels.
 
+* We will need to reboot the device get the selinux activated after we run the $ selinux-activate command. The GRUB boot menu will show a selection and we can select ubuntu.
+
+* Permissive mode means that the system is not enforcing security roles, rather just observing actions on our systems passively, we can think of it as a learning mode. Also, permissive mode dose not disallowing an action but logs what security policy would normally deny, and a lot of these policies are in audit log that's why we install auditd along with selinux.
+
+* We would normally run selinux in permissive mode for a while to let it observe and train it to what action are typical for our system, then we can switch it to enforced. For example, if we went straight to enforce mode the system won't allow login through ssh, if we allowed audit logs to record the action while in permissive mode it will know that this is a normal action, one thing that we will need to tell selinux to allow every thing it witnessed tell now using the $ sudo audit2allow --all -M mymodule comomand.
+
+* SELinux denies everything by default. Therefor it's a good idea to put selinux in enforcing mode when you're sure that the policies include everything that is required.
+
+* To permanently put selinux to enforce mode, go to /etc/selinux/config file and edit SELINUX value to enforcing.
+
+* Two files are generated with $edit2allow command mymodule.pp and mymodule.te, .pp is short for policy package, and .te is short for type enforcement. In a real scenario we would explore the .te file thoroughly and explore everything it allows in the system before deploy this in selinux. allow lines could allow certain process type to do certain actions on files with certain types.
+
+* SELinux can control port and what connect to it with the $ semanage port subcommand.
 
 commands:
 $ sudo apt install selinux-basics auditd: install SELinux in Ubuntu which does not has SELinux. auditd will help in building more SELinux features in our system and logging to the system. Configuration file will be created at /etc/selinux/config.
 $ sestatus: check SELinux service status.
 $ sudo selinux-activate: modify the GRUB bootloader, SELinux module will be loaded on boot, to see the change look at /etc/default/grub.
-
+$ getenforce: see whether selinux is running in enforced or permissive mode.
+$ sudo audit2why --all | less: show what selinux recorded in the audit log.
+$ ps -eZ: show all processes with "e" flag, and "Z" flag to show selinux rules.
+$ sudo audit2allow --all -M mymodule: tell selinux to enabled every thing it witnesses to this point. --all option tells it to inspect all logged events, and the -M flag tells it to generate a modular policy package which can be loaded to selinux to allow all those policy actions, the name of the module can be anything. When running this command it will create the package file, and instruct on how to activate the package.
+$ sudo setenforce 1: make selinux enforce the security policies by activating the enforce mode, note that this will only put selinux to enforce mode temporally.
+$ seinfo -u: see different user labels, and -r for roles, and -t for types.
+$ sudo chcon --reference=<file to get label of> <file to set label of>: copy the label from file to another.
+$ sudo restorecon -R <folder to restore type labels for its files>: restore file(s) default SELinux security contexts. -R for recursive. Note, this command only restores the type label.
+$ sudo restorecon -F -R <folder to restore labels for its files>: same as the above command but it restores all the labels.
+$ sudo semanage fcontext --add --type <new type label> <file path>: change the default type label of a file, because the $chcon command changes will be lost if reinstall selinux for example. Then we can use the $restorecon command to restore the default label which we just sat.
+$ sudo semanage fcontext --list: list selinux database of file contexts.
+$ sudo semanage fcontext --add --type <type label> <"folder(regex e.g. /.*)?">: change default labels for all the files under certain directory.
 
 

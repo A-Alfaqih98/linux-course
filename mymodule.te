@@ -1,0 +1,406 @@
+
+module mymodule 1.0;
+
+require {
+	type systemd_resolved_t;
+	type var_t;
+	type system_cronjob_t;
+	type user_runtime_t;
+	type systemd_detect_virt_t;
+	type dosfs_t;
+	type systemd_sessions_runtime_t;
+	type alsa_t;
+	type dpkg_script_t;
+	type bin_t;
+	type dpkg_exec_t;
+	type user_devpts_t;
+	type apt_t;
+	type unreserved_port_t;
+	type xdg_data_t;
+	type dpkg_t;
+	type fixed_disk_device_t;
+	type cupsd_t;
+	type NetworkManager_t;
+	type lib_t;
+	type systemd_hostnamed_t;
+	type devlog_t;
+	type sysctl_kernel_t;
+	type modules_conf_t;
+	type mandb_t;
+	type gkeyringd_exec_t;
+	type user_home_dir_t;
+	type udev_runtime_t;
+	type bpf_t;
+	type bluetooth_t;
+	type devpts_t;
+	type var_log_t;
+	type unlabeled_t;
+	type device_t;
+	type shadow_t;
+	type systemd_generator_t;
+	type user_runtime_root_t;
+	type systemd_unit_t;
+	type sysctl_t;
+	type devicekit_disk_t;
+	type apt_var_cache_t;
+	type etc_t;
+	type accountsd_t;
+	type security_t;
+	type systemd_user_runtime_dir_t;
+	type systemd_locale_t;
+	type colord_t;
+	type systemd_backlight_t;
+	type dpkg_var_lib_t;
+	type urandom_device_t;
+	type usr_t;
+	type locate_t;
+	type initrc_t;
+	type fusefs_t;
+	type init_runtime_t;
+	type devicekit_power_t;
+	type systemd_sessions_t;
+	type systemd_logind_inhibit_runtime_t;
+	type sysfs_t;
+	type crond_t;
+	type postgresql_log_t;
+	type plymouthd_t;
+	type shell_exec_t;
+	type policykit_t;
+	type dpkg_lock_t;
+	type su_exec_t;
+	type unconfined_t;
+	type tmp_t;
+	type udev_t;
+	type init_t;
+	type systemd_logind_t;
+	type apt_var_lib_t;
+	type fprintd_t;
+	type ldconfig_exec_t;
+	type var_run_t;
+	type avahi_t;
+	type man_t;
+	type user_tmp_t;
+	type system_dbusd_runtime_t;
+	type apt_var_log_t;
+	type modemmanager_t;
+	type kmod_t;
+	type tmpfs_t;
+	type systemd_resolved_runtime_t;
+	type uhid_device_t;
+	type systemd_tmpfiles_t;
+	type initrc_runtime_t;
+	type default_t;
+	type system_dbusd_t;
+	type xdg_cache_t;
+	type mount_t;
+	type postgresql_exec_t;
+	type cgroup_t;
+	type syslogd_t;
+	type xdm_var_lib_t;
+	type proc_t;
+	type xdm_t;
+	type var_lib_t;
+	class filesystem getattr;
+	class dir { add_name create getattr open read remove_name rmdir search setattr watch write };
+	class sock_file { create getattr write };
+	class file { append create entrypoint execute execute_no_trans getattr ioctl link lock map mounton open read relabelfrom relabelto rename setattr unlink write };
+	class lnk_file { create getattr read relabelfrom relabelto rename setattr unlink };
+	class fd use;
+	class unix_stream_socket connectto;
+	class process { execmem getsched noatsecure rlimitinh setexec setrlimit setsched siginh signal transition };
+	class capability { audit_write dac_read_search fsetid net_admin setgid setuid sys_resource };
+	class chr_file { getattr ioctl open read setattr write };
+	class dbus send_msg;
+	class capability2 bpf;
+	class bpf { map_read map_write };
+	class blk_file { getattr ioctl open read };
+	class netlink_kobject_uevent_socket { bind create getattr read setopt write };
+	class alg_socket { bind create };
+	class system status;
+	class fifo_file write;
+	class udp_socket name_bind;
+	class process2 nnp_transition;
+	class netlink_audit_socket { create nlmsg_relay read write };
+	class passwd rootok;
+	class unix_dgram_socket { connect create sendto write };
+	class security compute_av;
+	class service { start status };
+}
+
+#============= NetworkManager_t ==============
+allow NetworkManager_t initrc_runtime_t:dir { add_name create getattr open read remove_name search write };
+allow NetworkManager_t initrc_runtime_t:file { create rename unlink };
+allow NetworkManager_t xdg_cache_t:dir search;
+
+#============= accountsd_t ==============
+allow accountsd_t shell_exec_t:file { execute execute_no_trans map open read };
+allow accountsd_t unconfined_t:dbus send_msg;
+
+#!!!! This avc can be allowed using one of the these booleans:
+#     authlogin_nsswitch_use_ldap, global_ssp
+allow accountsd_t urandom_device_t:chr_file { open read };
+allow accountsd_t user_home_dir_t:dir read;
+allow accountsd_t usr_t:file { execute execute_no_trans };
+allow accountsd_t xdg_cache_t:dir search;
+
+#============= alsa_t ==============
+allow alsa_t initrc_runtime_t:dir search;
+allow alsa_t sysfs_t:file write;
+
+#============= apt_t ==============
+allow apt_t systemd_unit_t:service { start status };
+
+#============= avahi_t ==============
+allow avahi_t colord_t:dbus send_msg;
+allow avahi_t etc_t:dir watch;
+allow avahi_t unconfined_t:dbus send_msg;
+allow avahi_t xdm_t:dbus send_msg;
+
+#============= bluetooth_t ==============
+allow bluetooth_t self:alg_socket { bind create };
+allow bluetooth_t uhid_device_t:chr_file { getattr open read write };
+allow bluetooth_t xdm_t:dbus send_msg;
+
+#============= colord_t ==============
+allow colord_t avahi_t:dbus send_msg;
+allow colord_t default_t:dir search;
+allow colord_t systemd_sessions_runtime_t:dir search;
+allow colord_t systemd_sessions_runtime_t:file { getattr open read };
+allow colord_t unconfined_t:fd use;
+allow colord_t unreserved_port_t:udp_socket name_bind;
+allow colord_t xdg_data_t:file { getattr map read };
+allow colord_t xdm_t:dir search;
+allow colord_t xdm_t:file { getattr ioctl open read };
+allow colord_t xdm_var_lib_t:file map;
+
+#============= crond_t ==============
+allow crond_t unlabeled_t:file { getattr open read };
+
+#============= cupsd_t ==============
+allow cupsd_t self:process getsched;
+allow cupsd_t xdm_t:dbus send_msg;
+
+#============= devicekit_disk_t ==============
+allow devicekit_disk_t initrc_t:dbus send_msg;
+
+#============= devicekit_power_t ==============
+allow devicekit_power_t initrc_t:dbus send_msg;
+
+#============= fprintd_t ==============
+allow fprintd_t self:netlink_kobject_uevent_socket { bind create getattr read setopt };
+allow fprintd_t sysfs_t:file write;
+allow fprintd_t systemd_logind_inhibit_runtime_t:fifo_file write;
+allow fprintd_t systemd_logind_t:dbus send_msg;
+allow fprintd_t systemd_logind_t:fd use;
+allow fprintd_t udev_runtime_t:dir search;
+allow fprintd_t udev_runtime_t:file { getattr open read };
+allow fprintd_t unconfined_t:dbus send_msg;
+
+#============= init_t ==============
+allow init_t self:file mounton;
+
+#============= initrc_t ==============
+allow initrc_t dpkg_t:process2 nnp_transition;
+allow initrc_t unconfined_t:dbus send_msg;
+
+#============= kmod_t ==============
+allow kmod_t modules_conf_t:lnk_file read;
+
+#============= locate_t ==============
+allow locate_t devlog_t:sock_file write;
+allow locate_t init_t:dir search;
+allow locate_t init_t:file { getattr open read };
+allow locate_t security_t:file map;
+allow locate_t security_t:security compute_av;
+allow locate_t self:capability { audit_write net_admin setgid setuid sys_resource };
+allow locate_t self:netlink_audit_socket { create nlmsg_relay read write };
+allow locate_t self:passwd rootok;
+allow locate_t self:process { getsched setrlimit };
+allow locate_t self:unix_dgram_socket { connect create write };
+allow locate_t shadow_t:file { open read };
+allow locate_t su_exec_t:file { execute execute_no_trans map open read };
+allow locate_t sysctl_kernel_t:dir search;
+allow locate_t sysctl_kernel_t:file { open read };
+allow locate_t syslogd_t:unix_dgram_socket sendto;
+allow locate_t system_dbusd_runtime_t:sock_file write;
+allow locate_t system_dbusd_t:dbus send_msg;
+allow locate_t system_dbusd_t:unix_stream_socket connectto;
+allow locate_t systemd_logind_t:dbus send_msg;
+allow locate_t systemd_logind_t:fd use;
+allow locate_t systemd_sessions_runtime_t:fifo_file write;
+allow locate_t tmp_t:dir { add_name remove_name write };
+allow locate_t tmp_t:file { create open read unlink write };
+allow locate_t unlabeled_t:chr_file getattr;
+allow locate_t unlabeled_t:dir { getattr open read search };
+allow locate_t unlabeled_t:file getattr;
+allow locate_t unlabeled_t:lnk_file getattr;
+allow locate_t var_t:dir { add_name remove_name write };
+allow locate_t var_t:file { create open rename setattr unlink write };
+
+#============= mandb_t ==============
+allow mandb_t default_t:dir search;
+
+#============= modemmanager_t ==============
+allow modemmanager_t initrc_t:dbus send_msg;
+allow modemmanager_t xdm_t:dbus send_msg;
+
+#============= mount_t ==============
+allow mount_t init_t:netlink_kobject_uevent_socket { read write };
+
+#!!!! This avc can be allowed using the boolean 'allow_mount_anyfile'
+allow mount_t tmp_t:file open;
+allow mount_t tmp_t:file { read write };
+
+#!!!! This avc can be allowed using the boolean 'allow_mount_anyfile'
+allow mount_t var_lib_t:file { open read };
+
+#============= plymouthd_t ==============
+allow plymouthd_t init_t:process signal;
+
+#============= policykit_t ==============
+allow policykit_t usr_t:file map;
+allow policykit_t xdg_cache_t:dir search;
+
+#============= system_cronjob_t ==============
+allow system_cronjob_t etc_t:dir { add_name write };
+allow system_cronjob_t etc_t:file { create write };
+
+#============= system_dbusd_t ==============
+allow system_dbusd_t apt_var_cache_t:dir { add_name getattr remove_name search write };
+allow system_dbusd_t apt_var_cache_t:file { create getattr lock map open read rename setattr unlink write };
+allow system_dbusd_t apt_var_lib_t:dir { add_name getattr open read remove_name search write };
+allow system_dbusd_t apt_var_lib_t:file { create getattr lock open read rename setattr unlink write };
+allow system_dbusd_t apt_var_log_t:dir { add_name getattr remove_name search write };
+allow system_dbusd_t apt_var_log_t:file { append create getattr open setattr unlink write };
+allow system_dbusd_t bin_t:dir { add_name remove_name write };
+allow system_dbusd_t bin_t:file { execute execute_no_trans getattr ioctl link map open read relabelto rename unlink write };
+allow system_dbusd_t bin_t:lnk_file { create relabelfrom relabelto rename setattr unlink };
+allow system_dbusd_t devpts_t:chr_file { getattr ioctl open read write };
+allow system_dbusd_t dpkg_exec_t:file { execute execute_no_trans getattr ioctl map open read };
+allow system_dbusd_t dpkg_lock_t:file { lock open read write };
+allow system_dbusd_t dpkg_script_t:process { noatsecure rlimitinh siginh transition };
+allow system_dbusd_t dpkg_var_lib_t:dir { add_name create getattr open read remove_name rmdir search setattr write };
+allow system_dbusd_t dpkg_var_lib_t:file { create execute getattr ioctl link lock open read rename setattr unlink write };
+allow system_dbusd_t etc_t:dir { add_name remove_name write };
+allow system_dbusd_t etc_t:file { create relabelfrom relabelto setattr unlink write };
+allow system_dbusd_t ldconfig_exec_t:file getattr;
+allow system_dbusd_t lib_t:dir { add_name remove_name write };
+allow system_dbusd_t lib_t:file { create link relabelfrom relabelto rename setattr unlink write };
+allow system_dbusd_t lib_t:lnk_file { create relabelfrom relabelto rename setattr unlink };
+allow system_dbusd_t man_t:dir { add_name getattr remove_name search write };
+allow system_dbusd_t man_t:file { create getattr link open read relabelfrom relabelto rename setattr unlink write };
+allow system_dbusd_t security_t:file map;
+allow system_dbusd_t self:capability { dac_read_search fsetid };
+allow system_dbusd_t self:process { setexec setsched };
+allow system_dbusd_t shadow_t:file { getattr open read };
+allow system_dbusd_t tmpfs_t:file { execute map read write };
+allow system_dbusd_t unconfined_t:fd use;
+allow system_dbusd_t unconfined_t:unix_stream_socket connectto;
+allow system_dbusd_t user_devpts_t:chr_file { getattr ioctl open read write };
+allow system_dbusd_t user_runtime_root_t:dir search;
+allow system_dbusd_t user_runtime_t:dir search;
+allow system_dbusd_t user_tmp_t:sock_file { getattr write };
+allow system_dbusd_t usr_t:dir { add_name remove_name write };
+allow system_dbusd_t usr_t:file { create link relabelfrom relabelto rename setattr unlink write };
+allow system_dbusd_t usr_t:lnk_file { create relabelfrom relabelto rename setattr unlink };
+allow system_dbusd_t var_lib_t:dir { add_name remove_name watch write };
+allow system_dbusd_t var_lib_t:file { create getattr ioctl map open read rename setattr unlink write };
+allow system_dbusd_t var_log_t:dir search;
+allow system_dbusd_t var_log_t:file { append open };
+allow system_dbusd_t var_t:file { getattr ioctl lock open read write };
+allow system_dbusd_t xdg_data_t:dir search;
+allow system_dbusd_t xdg_data_t:file read;
+
+#============= systemd_backlight_t ==============
+allow systemd_backlight_t cgroup_t:dir search;
+allow systemd_backlight_t cgroup_t:filesystem getattr;
+
+#============= systemd_detect_virt_t ==============
+allow systemd_detect_virt_t cgroup_t:filesystem getattr;
+allow systemd_detect_virt_t init_runtime_t:dir search;
+allow systemd_detect_virt_t init_t:dir search;
+allow systemd_detect_virt_t init_t:file { getattr ioctl open read };
+allow systemd_detect_virt_t proc_t:file { getattr ioctl open read };
+allow systemd_detect_virt_t sysctl_kernel_t:dir search;
+allow systemd_detect_virt_t sysctl_kernel_t:file { getattr ioctl open read };
+allow systemd_detect_virt_t sysctl_t:dir search;
+allow systemd_detect_virt_t sysfs_t:file { getattr ioctl open read };
+allow systemd_detect_virt_t sysfs_t:lnk_file read;
+
+#============= systemd_generator_t ==============
+allow systemd_generator_t postgresql_exec_t:file execute;
+allow systemd_generator_t udev_runtime_t:file { getattr open read };
+allow systemd_generator_t usr_t:file { map open read };
+
+#============= systemd_hostnamed_t ==============
+allow systemd_hostnamed_t cgroup_t:filesystem getattr;
+allow systemd_hostnamed_t udev_runtime_t:dir search;
+allow systemd_hostnamed_t udev_runtime_t:file { getattr open read };
+allow systemd_hostnamed_t xdm_t:dbus send_msg;
+
+#============= systemd_locale_t ==============
+allow systemd_locale_t cgroup_t:dir search;
+allow systemd_locale_t cgroup_t:filesystem getattr;
+allow systemd_locale_t init_runtime_t:sock_file write;
+allow systemd_locale_t unconfined_t:dbus send_msg;
+allow systemd_locale_t xdm_t:dbus send_msg;
+
+#============= systemd_logind_t ==============
+allow systemd_logind_t device_t:chr_file { getattr setattr };
+
+#!!!! This avc can be allowed using the boolean 'systemd_logind_get_bootloader'
+allow systemd_logind_t dosfs_t:dir { getattr search };
+
+#!!!! This avc can be allowed using the boolean 'systemd_logind_get_bootloader'
+allow systemd_logind_t dosfs_t:filesystem getattr;
+
+#!!!! This avc can be allowed using the boolean 'systemd_logind_get_bootloader'
+allow systemd_logind_t fixed_disk_device_t:blk_file { getattr ioctl open read };
+allow systemd_logind_t fprintd_t:dbus send_msg;
+allow systemd_logind_t locate_t:dbus send_msg;
+allow systemd_logind_t locate_t:dir search;
+allow systemd_logind_t locate_t:file { getattr ioctl open read };
+
+#============= systemd_resolved_t ==============
+allow systemd_resolved_t cgroup_t:dir search;
+allow systemd_resolved_t cgroup_t:filesystem getattr;
+allow systemd_resolved_t systemd_resolved_runtime_t:sock_file create;
+
+#============= systemd_sessions_t ==============
+allow systemd_sessions_t cgroup_t:dir search;
+allow systemd_sessions_t cgroup_t:filesystem getattr;
+
+#============= systemd_tmpfiles_t ==============
+allow systemd_tmpfiles_t cgroup_t:filesystem getattr;
+
+#!!!! This avc can be allowed using the boolean 'systemd_tmpfiles_manage_all'
+allow systemd_tmpfiles_t postgresql_log_t:dir getattr;
+
+#============= systemd_user_runtime_dir_t ==============
+allow systemd_user_runtime_dir_t cgroup_t:dir search;
+allow systemd_user_runtime_dir_t cgroup_t:filesystem getattr;
+allow systemd_user_runtime_dir_t fusefs_t:dir getattr;
+
+#============= udev_t ==============
+allow udev_t bpf_t:dir search;
+allow udev_t bpf_t:file { read write };
+allow udev_t lib_t:file execute_no_trans;
+allow udev_t self:capability2 bpf;
+allow udev_t unconfined_t:bpf { map_read map_write };
+allow udev_t var_run_t:file { getattr open write };
+
+#============= unconfined_t ==============
+allow unconfined_t gkeyringd_exec_t:file entrypoint;
+allow unconfined_t self:dir { add_name write };
+allow unconfined_t self:file create;
+
+#!!!! This avc can be allowed using one of the these booleans:
+#     allow_execmem, allow_execstack
+allow unconfined_t self:process execmem;
+
+#============= xdm_t ==============
+allow xdm_t init_t:system status;
+
+#!!!! This avc can be allowed using one of the these booleans:
+#     allow_execmem, allow_execstack, xserver_gnome_xdm
+allow xdm_t self:process execmem;
